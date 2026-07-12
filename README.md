@@ -22,7 +22,7 @@ AI-Brain/
 ├── 01 Daily/        ← 每日记录
 ├── 02 Projects/     ← 项目笔记 + Git Submodule
 │   └── LinkTech-hydraulic/
-│       ├── _index.md     ← 项目笔记（本仓库管理）
+│       ├── linktec.md    ← 项目笔记（本仓库管理）
 │       └── code/         ← Git Submodule（实际代码仓库）
 ├── 03 Skills/       ← 可复用技能/工作流知识
 ├── 04 Prompts/      ← 提示词库
@@ -32,7 +32,7 @@ AI-Brain/
 ├── 08 Templates/    ← 模板
 ├── 99 Archive/      ← 归档
 ├── Attachments/     ← 附件文件
-├── _index.md        ← Obsidian 图谱入口
+├── codex.md         ← Obsidian 图谱入口
 └── README.md        ← 本文件
 ```
 
@@ -52,7 +52,7 @@ AI-Brain/
 ```
 AI-Brain（父仓库）
   ├── 02 Projects/Project-A/
-  │   ├── _index.md        ← 项目笔记（markdown，在 AI-Brain 中管理）
+  │   ├── linktec.md       ← 项目笔记（markdown，在 AI-Brain 中管理）
   │   └── code/            ← Git Submodule → 实际代码仓库
   └── 02 Projects/Project-B/
       └── ...

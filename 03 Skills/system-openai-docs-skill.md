@@ -40,4 +40,4 @@
 
 ---
 
-**相关：** [[_index|← 返回 Skills 索引]] · [[system-skill-creator-skill|Skill Creator]] · [[system-plugin-creator-skill|Plugin Creator]] · [[../05 Architecture/codex-system-architecture|系统架构]]
+**相关：** [[codex|← 返回 Skills 索引]] · [[system-skill-creator-skill|Skill Creator]] · [[system-plugin-creator-skill|Plugin Creator]] · [[../05 Architecture/codex-system-architecture|系统架构]]

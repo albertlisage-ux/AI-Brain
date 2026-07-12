@@ -92,4 +92,4 @@ register_proc.php
 
 ---
 
-**相关：** [[../../02 Projects/LinkTech-hydraulic/_index|← 项目主页]] · [[linktech-deployment|部署运维]] · [[../../06 Decisions/linktech-security|安全策略]] · [[../../07 Lessons/linktech-troubleshooting|故障排查]]
+**相关：** [[../../02 Projects/LinkTech-hydraulic/linktec|← 项目主页]] · [[linktech-deployment|部署运维]] · [[../../06 Decisions/linktech-security|安全策略]] · [[../../07 Lessons/linktech-troubleshooting|故障排查]]

@@ -12,7 +12,7 @@ graph LR
     LH -->|指向| REMOTE[git@github.com:albertlisage-ux/LinkTech-hydraulic.git]
     
     subgraph "本目录（笔记）"
-        INDEX[_index.md]
+        INDEX[linktec.md]
         SKILL[03 Skills/ 引用]
         ARCH[05 Architecture/ 引用]
         DECI[06 Decisions/ 引用]
@@ -82,11 +82,11 @@ git clone --recursive git@github.com:albertlisage-ux/AI-Brain.git
 | 子模块远程 | `git@github.com:albertlisage-ux/LinkTech-hydraulic.git` |
 | 关系 | AI-Brain 父仓库 → Submodule `code/` → LinkTech-hydraulic 代码 |
 
-> 📌 笔记文件（`_index.md` 等）在 AI-Brain 仓库中管理，`code/` 子模块指向实际项目代码的特定 commit。
+> 📌 笔记文件（`linktec.md` 等）在 AI-Brain 仓库中管理，`code/` 子模块指向实际项目代码的特定 commit。
 
 ## 相关文件间交叉链接
 
-- [[../../03 Skills/_index|← 返回 Skills 总览]]
+- [[../../03 Skills/codex|← 返回 Skills 总览]]
 - [[../../05 Architecture/codex-system-architecture|Codex 系统架构]]
 - [[../../06 Decisions/codex-config-decisions|Codex 配置决策]]
 

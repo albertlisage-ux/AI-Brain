@@ -37,8 +37,8 @@ graph TB
 |------|------|
 | [[00 Inbox/codex-import-2026-07-12\|📥 00 Inbox]] | 待处理与导入记录 |
 | [[01 Daily/\|📅 01 Daily]] | 每日记录 |
-| [[02 Projects/LinkTech-hydraulic/_index\|📦 02 Projects]] | 项目笔记（含 LinkTech-hydraulic） |
-| [[03 Skills/_index\|🔧 03 Skills]] | Skills 知识库（13 个） |
+| [[02 Projects/LinkTech-hydraulic/linktec\|📦 02 Projects]] | 项目笔记（含 LinkTech-hydraulic） |
+| [[03 Skills/codex\|🔧 03 Skills]] | Skills 知识库（13 个） |
 | [[04 Prompts/\|💬 04 Prompts]] | 提示词库 |
 | [[05 Architecture/codex-system-architecture\|🏗 05 Architecture]] | 架构设计（2 篇） |
 | [[06 Decisions/codex-config-decisions\|📐 06 Decisions]] | 决策记录（4 篇） |
@@ -67,7 +67,7 @@ graph LR
 ## 最近导入
 
 - [[00 Inbox/codex-import-2026-07-12|2026-07-12: Codex 配置导入]] — 从 `~/.codex/` 导入 13 个 Skills + 架构 + 决策
-- [[02 Projects/LinkTech-hydraulic/_index|2026-07-12: LinkTech-hydraulic 项目导入]] — 工业液压门户项目知识入库
+- [[02 Projects/LinkTech-hydraulic/linktec|2026-07-12: LinkTech-hydraulic 项目导入]] — 工业液压门户项目知识入库
 
 ---
 

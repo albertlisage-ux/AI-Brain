@@ -34,4 +34,4 @@
 
 ---
 
-**相关：** [[_index|← 返回 Skills 索引]] · [[../05 Architecture/codex-system-architecture|系统架构]] · [[system-imagegen-skill|ImageGen]]
+**相关：** [[codex|← 返回 Skills 索引]] · [[../05 Architecture/codex-system-architecture|系统架构]] · [[system-imagegen-skill|ImageGen]]

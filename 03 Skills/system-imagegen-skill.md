@@ -46,4 +46,4 @@
 
 ---
 
-**相关：** [[_index|← 返回 Skills 索引]] · [[screenshot-skill|Screenshot]] · [[pdf-skill|PDF]] · [[system-openai-docs-skill|OpenAI Docs]]
+**相关：** [[codex|← 返回 Skills 索引]] · [[screenshot-skill|Screenshot]] · [[pdf-skill|PDF]] · [[system-openai-docs-skill|OpenAI Docs]]

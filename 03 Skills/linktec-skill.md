@@ -55,4 +55,4 @@ php hydraulich/generate_product_pages.php --force
 
 ---
 
-**相关：** [[../02 Projects/LinkTech-hydraulic/_index|← 项目主页]] · [[../03 Skills/_index|Skills 索引]] · [[linktec-frontend-taste|前端 Taste 规则]]
+**相关：** [[../02 Projects/LinkTech-hydraulic/linktec|← 项目主页]] · [[../03 Skills/codex|Skills 索引]] · [[linktec-frontend-taste|前端 Taste 规则]]

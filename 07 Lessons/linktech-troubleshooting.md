@@ -83,4 +83,4 @@ php hydraulich/generate_product_pages.php --status
 
 ---
 
-**相关：** [[../../02 Projects/LinkTech-hydraulic/_index|← 项目主页]] · [[linktech-changelog|变更日志]] · [[../../05 Architecture/linktech-user-system|用户系统]] · [[../../05 Architecture/linktech-deployment|部署运维]]
+**相关：** [[../../02 Projects/LinkTech-hydraulic/linktec|← 项目主页]] · [[linktech-changelog|变更日志]] · [[../../05 Architecture/linktech-user-system|用户系统]] · [[../../05 Architecture/linktech-deployment|部署运维]]

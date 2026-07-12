@@ -56,4 +56,4 @@ python3 scripts/update_plugin_cachebuster.py <plugin-path>
 
 ---
 
-**相关：** [[_index|← 返回 Skills 索引]] · [[system-skill-creator-skill|Skill Creator]] · [[system-skill-installer-skill|Skill Installer]] · [[system-openai-docs-skill|OpenAI Docs]]
+**相关：** [[codex|← 返回 Skills 索引]] · [[system-skill-creator-skill|Skill Creator]] · [[system-skill-installer-skill|Skill Installer]] · [[system-openai-docs-skill|OpenAI Docs]]

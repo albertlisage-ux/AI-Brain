@@ -12,5 +12,5 @@
 
 ## 交叉引用
 
-- [[../03 Skills/_index|Skills 索引]]
+- [[../03 Skills/codex|Skills 索引]]
 - [[../06 Decisions/codex-config-decisions|配置决策]]

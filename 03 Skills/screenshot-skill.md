@@ -39,5 +39,5 @@ python3 <skill-path>/scripts/take_screenshot.py --app "<App>"
 
 ---
 
-**相关：** [[_index|← 返回 Skills 索引]] · [[playwright-skill|Playwright]] · [[system-imagegen-skill|ImageGen]]
+**相关：** [[codex|← 返回 Skills 索引]] · [[playwright-skill|Playwright]] · [[system-imagegen-skill|ImageGen]]
 | 列出匹配窗口 | `python3 <path>/take_screenshot.py --list-windows --app "Codex"` |

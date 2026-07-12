@@ -55,4 +55,4 @@
 
 ---
 
-**相关：** [[_index|← 返回 Skills 索引]] · [[taste-skill|Taste Skill]] · [[../06 Decisions/taste-skill-design-philosophy|Taste Skill 设计理念]]
+**相关：** [[codex|← 返回 Skills 索引]] · [[taste-skill|Taste Skill]] · [[../06 Decisions/taste-skill-design-philosophy|Taste Skill 设计理念]]

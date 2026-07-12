@@ -12,5 +12,5 @@
 
 ## 交叉引用
 
-- [[../03 Skills/_index|Skills 索引]]
+- [[../03 Skills/codex|Skills 索引]]
 - [[../05 Architecture/codex-system-architecture|系统架构]]

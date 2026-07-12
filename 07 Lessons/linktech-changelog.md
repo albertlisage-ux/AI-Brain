@@ -79,4 +79,4 @@
 
 ---
 
-**相关：** [[../../02 Projects/LinkTech-hydraulic/_index|← 项目主页]] · [[linktech-troubleshooting|故障排查手册]] · [[../../06 Decisions/linktech-security|安全策略]]
+**相关：** [[../../02 Projects/LinkTech-hydraulic/linktec|← 项目主页]] · [[linktech-troubleshooting|故障排查手册]] · [[../../06 Decisions/linktech-security|安全策略]]
