@@ -40,18 +40,17 @@ def _build_filter(filters: dict | None) -> Filter | None:
 def search_qdrant(question: str, top_k: int = 5, filters: dict | None = None) -> list[dict]:
     """Search Qdrant for chunks relevant to the question."""
     client = get_client()
-    embedder = get_embedder()
 
     query_vec = _ollama_embed(question)
     qdrant_filter = _build_filter(filters)
 
-    hits = client.search(
+    hits = client.query_points(
         collection_name=QDRANT_COLLECTION,
-        query_vector=query_vec,
+        query=query_vec,
         limit=top_k,
         query_filter=qdrant_filter,
         with_payload=True,
-    )
+    ).points
 
     results = []
     for hit in hits:

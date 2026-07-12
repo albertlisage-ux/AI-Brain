@@ -38,18 +38,17 @@ def _build_filter(folder: str | None = None) -> Filter | None:
 def search_knowledge(query: str, top_k: int = 5, folder: str | None = None) -> list[dict]:
     """Search the knowledge base for relevant chunks."""
     client = get_qdrant()
-    embedder = get_embedder()
 
     query_vec = _ollama_embed(query)
     qdrant_filter = _build_filter(folder)
 
-    hits = client.search(
+    hits = client.query_points(
         collection_name=QDRANT_COLLECTION,
-        query_vector=query_vec,
+        query=query_vec,
         limit=top_k,
         query_filter=qdrant_filter,
         with_payload=True,
-    )
+    ).points
 
     return [
         {
