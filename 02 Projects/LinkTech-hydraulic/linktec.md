@@ -15,8 +15,6 @@ graph LR
         INDEX[linktec.md]
         SKILL[03 Skills/ 引用]
         ARCH[05 Architecture/ 引用]
-        DECI[06 Decisions/ 引用]
-        LESS[07 Lessons/ 引用]
     end
     
     INDEX -.->|笔记| LH
