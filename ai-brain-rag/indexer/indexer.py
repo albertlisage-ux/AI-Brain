@@ -196,7 +196,7 @@ def main():
 
     logger.info("Connected to Qdrant at %s:%s", QDRANT_HOST, QDRANT_PORT)
     logger.info("Model: %s  Dim: %d  Scan interval: %ds",
-                os.getenv("EMBEDDING_MODEL", "BAAI/bge-small-zh-v1.5"),
+                os.getenv("EMBEDDING_MODEL", "intfloat/multilingual-e5-small"),
                 EMBEDDING_DIM, SCAN_INTERVAL)
 
     while True:
