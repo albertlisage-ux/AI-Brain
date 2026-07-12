@@ -1,14 +1,18 @@
 """MCP tool implementations for querying the AI-Brain knowledge base."""
 
+import json
 import os
+import urllib.request
 from functools import lru_cache
 from pathlib import Path
 
 from qdrant_client import QdrantClient
 from qdrant_client.models import Filter, FieldCondition, MatchValue
-from sentence_transformers import SentenceTransformer
 
-from config import QDRANT_HOST, QDRANT_PORT, QDRANT_COLLECTION, EMBEDDING_MODEL, OBSIDIAN_VAULT
+from config import QDRANT_HOST, QDRANT_PORT, QDRANT_COLLECTION, OBSIDIAN_VAULT
+
+OLLAMA_HOST = os.getenv("OLLAMA_HOST", "http://host.docker.internal:11434")
+OLLAMA_MODEL = os.getenv("OLLAMA_EMBED_MODEL", "nomic-embed-text")
 
 
 @lru_cache(maxsize=1)
@@ -16,9 +20,13 @@ def get_qdrant() -> QdrantClient:
     return QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
 
 
-@lru_cache(maxsize=1)
-def get_embedder():
-    return SentenceTransformer(EMBEDDING_MODEL, trust_remote_code=True)
+def _ollama_embed(text: str) -> list[float]:
+    url = f"{OLLAMA_HOST}/api/embed"
+    payload = json.dumps({"model": OLLAMA_MODEL, "input": [text]}).encode()
+    req = urllib.request.Request(url, data=payload, headers={"Content-Type": "application/json"})
+    with urllib.request.urlopen(req, timeout=30) as resp:
+        data = json.loads(resp.read())
+    return data["embeddings"][0]
 
 
 def _build_filter(folder: str | None = None) -> Filter | None:
@@ -32,7 +40,7 @@ def search_knowledge(query: str, top_k: int = 5, folder: str | None = None) -> l
     client = get_qdrant()
     embedder = get_embedder()
 
-    query_vec = embedder.encode(query, normalize_embeddings=True).tolist()
+    query_vec = _ollama_embed(query)
     qdrant_filter = _build_filter(folder)
 
     hits = client.search(

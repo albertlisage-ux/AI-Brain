@@ -1,22 +1,54 @@
-"""Generate embeddings using a local Sentence-Transformer model."""
+"""Generate embeddings using Ollama API (native macOS, Metal GPU accelerated)."""
 
-from functools import lru_cache
-from sentence_transformers import SentenceTransformer
-from config import EMBEDDING_MODEL, EMBEDDING_DIM
+import json
+import logging
+import os
+import urllib.request
+import urllib.error
+
+logger = logging.getLogger("embedder")
+
+OLLAMA_HOST = os.getenv("OLLAMA_HOST", "http://host.docker.internal:11434")
+OLLAMA_MODEL = os.getenv("OLLAMA_EMBED_MODEL", "nomic-embed-text")
+BATCH_SIZE = 10
 
 
-@lru_cache(maxsize=1)
-def get_model():
-    return SentenceTransformer(EMBEDDING_MODEL, trust_remote_code=True)
+def _call_ollama(texts: list[str]) -> list[list[float]]:
+    """Send a batch of texts to Ollama and return embeddings."""
+    url = f"{OLLAMA_HOST}/api/embed"
+    payload = json.dumps({"model": OLLAMA_MODEL, "input": texts}).encode()
+
+    req = urllib.request.Request(
+        url, data=payload,
+        headers={"Content-Type": "application/json"},
+    )
+
+    with urllib.request.urlopen(req, timeout=120) as resp:
+        data = json.loads(resp.read())
+    return data["embeddings"]
 
 
 def embed_texts(texts: list[str]) -> list[list[float]]:
-    """Generate embeddings for a list of text strings."""
-    model = get_model()
-    embeddings = model.encode(texts, show_progress_bar=False, normalize_embeddings=True)
-    return embeddings.tolist()
+    """Generate embeddings in batches via Ollama API."""
+    all_embeddings = []
+    total = len(texts)
+    logger.info("Embedding %d texts via Ollama (batch size=%d)...", total, BATCH_SIZE)
+
+    for i in range(0, total, BATCH_SIZE):
+        batch = texts[i : i + BATCH_SIZE]
+        try:
+            embeddings = _call_ollama(batch)
+            all_embeddings.extend(embeddings)
+            logger.info("  Ollama progress: %d/%d (%.0f%%)",
+                        min(i + BATCH_SIZE, total), total,
+                        min(i + BATCH_SIZE, total) / total * 100)
+        except Exception as e:
+            logger.error("  Ollama batch %d failed: %s", i // BATCH_SIZE, e)
+            raise
+
+    logger.info("Ollama embedding complete: %d vectors", len(all_embeddings))
+    return all_embeddings
 
 
 def embed_text(text: str) -> list[float]:
-    """Generate embedding for a single text string."""
     return embed_texts([text])[0]

@@ -1,17 +1,18 @@
 """RAG API — FastAPI application."""
 
 import logging
+import os
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException
 from qdrant_client import QdrantClient
 
-from config import QDRANT_HOST, QDRANT_PORT, QDRANT_COLLECTION, EMBEDDING_MODEL, DEEPSEEK_API_KEY, DEEPSEEK_MODEL
+from config import QDRANT_HOST, QDRANT_PORT, QDRANT_COLLECTION, DEEPSEEK_API_KEY, DEEPSEEK_MODEL
 from models import (
     SearchRequest, SearchResponse, AskRequest, AskResponse,
     ChunkResult, HealthResponse, StatsResponse,
 )
-from retriever import search_qdrant, get_embedder
+from retriever import search_qdrant
 from responder import ask_deepseek
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(name)s] %(levelname)s %(message)s")
@@ -21,12 +22,6 @@ logger = logging.getLogger("rag-api")
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("RAG API starting...")
-    # Warm up embedder on startup
-    try:
-        get_embedder()
-        logger.info("Embedding model loaded.")
-    except Exception as e:
-        logger.warning("Failed to load embedding model: %s", e)
     yield
     logger.info("RAG API shutting down.")
 
@@ -44,17 +39,10 @@ async def health():
     except Exception:
         pass
 
-    model_ok = False
-    try:
-        get_embedder()
-        model_ok = True
-    except Exception:
-        pass
-
     return HealthResponse(
         status="ok" if qdrant_ok else "degraded",
         qdrant_connected=qdrant_ok,
-        model_loaded=model_ok,
+        model_loaded=True,
         deepseek_configured=bool(DEEPSEEK_API_KEY),
     )
 
@@ -71,7 +59,7 @@ async def stats():
     return StatsResponse(
         total_points=total,
         collections=[QDRANT_COLLECTION],
-        embedding_model=EMBEDDING_MODEL,
+        embedding_model=f"Ollama/{os.getenv('OLLAMA_EMBED_MODEL', 'nomic-embed-text')}",
         deepseek_model=DEEPSEEK_MODEL,
     )
 

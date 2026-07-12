@@ -59,7 +59,12 @@ def _chunk_text(text: str, heading: str) -> list[dict]:
         chunk_text = text[start:end].strip()
         if chunk_text:
             chunks.append({"heading": heading, "content": chunk_text})
-        start = end - CHUNK_OVERLAP if end < text_len else text_len
+
+        # Advance start — must always move forward to avoid infinite loops
+        next_start = end - CHUNK_OVERLAP if end < text_len else text_len
+        if next_start <= start:
+            next_start = end
+        start = next_start
 
     return chunks
 

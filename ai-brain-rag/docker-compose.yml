@@ -28,19 +28,16 @@ services:
         condition: service_healthy
     volumes:
       - ${OBSIDIAN_VAULT_PATH:-.}:/vault:ro
-      - ./data/model-cache:/model-cache:delegated
     environment:
       - QDRANT_HOST=qdrant
       - QDRANT_PORT=6333
       - QDRANT_COLLECTION=ai-brain
       - OBSIDIAN_VAULT=/vault
-      - EMBEDDING_MODEL=${EMBEDDING_MODEL:-intfloat/multilingual-e5-small}
-      - EMBEDDING_DIM=${EMBEDDING_DIM:-384}
+      - OLLAMA_HOST=http://host.docker.internal:11434
+      - OLLAMA_EMBED_MODEL=nomic-embed-text
       - SCAN_INTERVAL=${SCAN_INTERVAL:-30}
       - CHUNK_SIZE=${CHUNK_SIZE:-500}
       - CHUNK_OVERLAP=${CHUNK_OVERLAP:-50}
-      - HF_HOME=/model-cache
-      - HF_HUB_DOWNLOAD_TIMEOUT=120
 
   rag-api:
     build:
@@ -60,9 +57,8 @@ services:
       - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY:-}
       - DEEPSEEK_API_BASE=${DEEPSEEK_API_BASE:-https://api.deepseek.com}
       - DEEPSEEK_MODEL=${DEEPSEEK_MODEL:-deepseek-chat}
-      - EMBEDDING_MODEL=${EMBEDDING_MODEL:-intfloat/multilingual-e5-small}
-      - EMBEDDING_DIM=${EMBEDDING_DIM:-384}
-      - HF_HOME=/model-cache
+      - OLLAMA_HOST=http://host.docker.internal:11434
+      - OLLAMA_EMBED_MODEL=nomic-embed-text
     volumes:
       - ./data/model-cache:/model-cache:delegated
 
@@ -81,9 +77,7 @@ services:
       - QDRANT_HOST=qdrant
       - QDRANT_PORT=6333
       - QDRANT_COLLECTION=ai-brain
-      - EMBEDDING_MODEL=${EMBEDDING_MODEL:-intfloat/multilingual-e5-small}
-      - EMBEDDING_DIM=${EMBEDDING_DIM:-384}
-      - HF_HOME=/model-cache
+      - OLLAMA_HOST=http://host.docker.internal:11434
+      - OLLAMA_EMBED_MODEL=nomic-embed-text
     volumes:
-      - ./data/model-cache:/model-cache:delegated
       - ${OBSIDIAN_VAULT_PATH:-.}:/vault:ro
