@@ -40,6 +40,26 @@
 | 📜 变更历史 | [[../../07 Lessons/linktech-changelog\|变更日志]] | 版本历史与改版记录 |
 | 🔧 故障排查 | [[../../07 Lessons/linktech-troubleshooting\|故障排查手册]] | 常见错误与修复方案 |
 
+## Git Submodule
+
+此项目的实际代码仓库作为 Git Submodule 关联：
+
+```bash
+# 克隆 AI-Brain 后初始化子模块
+git submodule update --init --recursive
+
+# 或克隆时同时拉取子模块
+git clone --recursive <ai-brain-repo-url>
+```
+
+| 信息 | 值 |
+|------|-----|
+| 子模块路径 | `code/` |
+| 远程仓库 | `git@github.com:albertlisage-ux/LinkTech-hydraulic.git` |
+| 本地固定版本 | `code/` 目录下的 `.git` 指针 |
+
+> 📌 笔记文件（`_index.md` 等）在 AI-Brain 仓库中管理，`code/` 子模块指向实际项目代码的特定 commit。
+
 ## 相关文件间交叉链接
 
 - [[../../03 Skills/_index|← 返回 Skills 总览]]
