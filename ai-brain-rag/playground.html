@@ -237,12 +237,16 @@
 
   <hr style="border:none;border-top:1px solid #334155;margin:2px 0">
 
-  <label style="display:flex;justify-content:space-between">
-    <span>历史记录</span>
-    <button class="sidebar-btn" style="padding:2px 8px;font-size:11px" onclick="clearChat()">🗑 清除</button>
+  <label style="display:flex;justify-content:space-between;align-items:center">
+    <span>💬 对话</span>
+    <div style="display:flex;gap:4px">
+      <button class="sidebar-btn" style="padding:2px 8px;font-size:11px" onclick="exportChat()">📥</button>
+      <button class="sidebar-btn" style="padding:2px 8px;font-size:11px" onclick="newChat()">✨ 新建</button>
+    </div>
   </label>
-  <div class="history-list" id="historyList">
-    <div class="history-item" style="color:#475569;text-align:center;font-size:11px">暂无记录</div>
+  <div style="display:flex;flex-direction:column;gap:2px" id="historyContainer">
+    <div class="history-list" id="historyList"></div>
+    <button id="showAllBtn" onclick="toggleHistory()" style="display:none;padding:3px;border-radius:4px;border:1px solid #1e3a5f;background:transparent;color:#475569;font-size:10px;cursor:pointer">显示全部</button>
   </div>
 
   <button class="sidebar-btn" onclick="reindex()" id="reindexBtn">🔄 触发重新索引</button>
@@ -261,7 +265,10 @@
     <button class="active" data-tab="chat" onclick="switchTab('chat')">💬 对话</button>
     <button data-tab="api" onclick="switchTab('api')">📖 API</button>
     <span class="toolbar-spacer"></span>
-    <span class="toolbar-end"><span id="modeIndicator">🔍 /ask 模式</span></span>
+    <span class="toolbar-end">
+      <button onclick="newChat()" title="新对话" style="padding:3px 10px;border-radius:4px;border:1px solid #1e3a5f;background:transparent;color:#475569;font-size:11px;cursor:pointer;transition:all .1s">✨ 新对话</button>
+      <span id="modeIndicator">🔍 /ask 模式</span>
+    </span>
   </div>
 
   <div id="tab-chat" class="tab-content">
@@ -301,19 +308,148 @@
       </div>
       <div class="bubble" style="background:#1e293b;border:1px solid #334155;margin-bottom:16px">
         <h3 style="font-size:14px;margin-bottom:8px;color:#3b82f6">GET /health</h3>
-        <pre style="background:#0f172a;padding:12px;border-radius:6px;font-size:13px">curl http://localhost:8000/health\</pre\>
+        <pre style="background:#0f172a;padding:12px;border-radius:6px;font-size:13px">curl http://localhost:8000/health</pre>
       </div>
       <div class="bubble" style="background:#1e293b;border:1px solid #334155">
         <h3 style="font-size:14px;margin-bottom:8px;color:#3b82f6">GET /stats</h3>
-        <pre style="background:#0f172a;padding:12px;border-radius:6px;font-size:13px">curl http://localhost:8000/stats\</pre\>
+        <pre style="background:#0f172a;padding:12px;border-radius:6px;font-size:13px">curl http://localhost:8000/stats</pre>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-let chatHistory = [];
+// === Multi-session Chat ===
+let sessions = [];
+let currentSessionId = null;
 let msgIdCounter = 0;
+let sessionCounter = 0;
+
+function getCurrentSession() {
+  return sessions.find(s => s.id === currentSessionId);
+}
+
+function createSession() {
+  sessionCounter++;
+  const session = {
+    id: 's' + sessionCounter,
+    title: '新对话 ' + sessionCounter,
+    messages: [],
+    createdAt: Date.now(),
+  };
+  sessions.push(session);
+  currentSessionId = session.id;
+  return session;
+}
+
+function renderSession(session) {
+  const chat = document.getElementById('chat');
+  chat.innerHTML = '';
+  
+  if (!session || session.messages.length === 0) {
+    showChatEmpty();
+    return;
+  }
+  
+  session.messages.forEach((msg, i) => {
+    if (msg.role === 'user') {
+      const div = document.createElement('div');
+      div.className = 'msg user';
+      div.innerHTML = '<div class="bubble">' + esc(msg.content) + '</div>';
+      chat.appendChild(div);
+    } else if (msg.role === 'assistant') {
+      const div = document.createElement('div');
+      div.className = 'msg assistant';
+      div.id = 'm' + msg._mid;
+      const actionsHtml = '<div class="msg-actions"><button onclick="copyMsg(\'m' + msg._mid + '\')" title="复制">📋</button></div>';
+      div.innerHTML = '<div class="bubble">' + actionsHtml + msg.html + '</div>';
+      chat.appendChild(div);
+    }
+  });
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function switchSession(id) {
+  // Save scroll position of current session
+  const chat = document.getElementById('chat');
+  const current = getCurrentSession();
+  if (current) current.scrollPos = chat.scrollTop;
+  
+  currentSessionId = id;
+  const session = getCurrentSession();
+  renderSession(session);
+  renderHistory();
+  if (session && session.scrollPos) {
+    setTimeout(() => { chat.scrollTop = session.scrollPos; }, 50);
+  }
+  document.getElementById('input').focus();
+}
+
+function newChat() {
+  const session = createSession();
+  renderSession(session);
+  renderHistory();
+  document.getElementById('input').value = '';
+  document.getElementById('input').focus();
+  showToast('✨ 新对话已创建');
+}
+
+function deleteSession(id, e) {
+  e.stopPropagation();
+  const idx = sessions.findIndex(s => s.id === id);
+  if (idx === -1) return;
+  sessions.splice(idx, 1);
+  if (currentSessionId === id) {
+    if (sessions.length > 0) {
+      switchSession(sessions[Math.min(idx, sessions.length - 1)].id);
+    } else {
+      createSession();
+      renderSession(getCurrentSession());
+    }
+  }
+  renderHistory();
+  showToast('🗑 已删除');
+}
+
+function renameSession(id, e) {
+  e.stopPropagation();
+  const session = sessions.find(s => s.id === id);
+  if (!session) return;
+  const newTitle = prompt('重命名对话:', session.title);
+  if (newTitle && newTitle.trim()) {
+    session.title = newTitle.trim();
+    renderHistory();
+  }
+}
+
+function initChat() {
+  // Restore sessions from localStorage
+  const saved = localStorage.getItem('ai-brain-sessions');
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      if (parsed.length > 0) {
+        sessions = parsed;
+        currentSessionId = sessions[sessions.length - 1].id;
+        sessionCounter = sessions.reduce((max, s) => Math.max(max, parseInt(s.id.slice(1)) || 0), 0);
+        renderSession(getCurrentSession());
+        renderHistory();
+        return;
+      }
+    } catch {}
+  }
+  // No saved sessions — create a new one
+  createSession();
+  renderSession(getCurrentSession());
+  renderHistory();
+}
+
+// Auto-save sessions to localStorage after every mutation
+function saveSessions() {
+  try {
+    localStorage.setItem('ai-brain-sessions', JSON.stringify(sessions));
+  } catch {}
+}
 
 function switchTab(name) {
   document.querySelectorAll('.tab-content').forEach(el => el.setAttribute('data-hidden', ''));
@@ -384,30 +520,31 @@ async function reindex() {
 }
 
 function exportChat() {
-  if (!chatHistory.length) { showToast('没有可导出的对话'); return; }
-  let md = '# AI-Brain RAG 对话\n> 导出: ' + new Date().toLocaleString() + '\n\n';
-  chatHistory.forEach((m, i) => {
+  const session = getCurrentSession();
+  if (!session || !session.messages.length) { showToast('当前对话没有消息'); return; }
+  let md = '# AI-Brain RAG 对话\n> ' + session.title + '\n> 导出: ' + new Date().toLocaleString() + '\n\n';
+  session.messages.forEach(m => {
     md += '## ' + (m.role === 'user' ? '👤 你' : '🤖 AI') + '\n\n' + stripHtml(m.content) + '\n\n---\n\n';
   });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([md], { type: 'text/markdown' }));
   a.download = 'ai-brain-rag-' + new Date().toISOString().slice(0,10) + '.md';
   a.click();
-  showToast('✅ 已导出为 Markdown');
+  showToast('✅ 已导出');
 }
 
 function clearChat() {
-  if (!chatHistory.length) return;
-  if (!confirm('确定清除所有对话记录？')) return;
-  document.getElementById('chat').querySelectorAll('.msg').forEach(el => el.remove());
-  chatHistory = [];
-  document.getElementById('historyList').innerHTML = '<div class="history-item" style="color:#475569;text-align:center;font-size:11px">暂无记录</div>';
-  showChatEmpty();
+  const session = getCurrentSession();
+  if (!session || !session.messages.length) return;
+  if (!confirm('确定清除当前对话？')) return;
+  session.messages = [];
+  renderSession(session);
+  renderHistory();
 }
 
 function showChatEmpty() {
-  if (document.getElementById('chat').querySelector('.msg')) return;
-  document.getElementById('chat').innerHTML = `<div class="empty-state">
+  const chat = document.getElementById('chat');
+  chat.innerHTML = `<div class="empty-state">
     <div class="icon">💡</div><h2>向你的知识库提问</h2>
     <p>选择左侧模式，输入问题按 <kbd>Enter</kbd> 发送</p>
     <div class="quick-chips">
@@ -421,15 +558,73 @@ function showChatEmpty() {
   </div>`;
 }
 
-function updateHistory() {
+let _historyExpanded = false;
+
+function toggleHistory() {
+  _historyExpanded = !_historyExpanded;
+  document.getElementById('showAllBtn').textContent = _historyExpanded ? '收起' : '显示全部 (' + sessions.length + '条)';
+  renderHistory();
+}
+
+function renderHistory() {
   const list = document.getElementById('historyList');
-  if (!chatHistory.length) {
-    list.innerHTML = '<div class="history-item" style="color:#475569;text-align:center;font-size:11px">暂无记录</div>';
+  const btn = document.getElementById('showAllBtn');
+
+  if (!sessions.length) {
+    list.innerHTML = '<div style="padding:5px 6px;color:#475569;font-size:11px;text-align:center">暂无对话</div>';
+    btn.style.display = 'none';
     return;
   }
-  list.innerHTML = chatHistory.map((m, i) => m.role === 'user'
-    ? `<div class="history-item" onclick="document.querySelectorAll('.msg')[${i}]?.scrollIntoView({behavior:'smooth',block:'center'})">👤 <span class="q">${trunc(stripHtml(m.content).replace(/\n/g,' '), 36)}</span></div>`
-    : '').join('');
+
+  const maxShow = _historyExpanded ? sessions.length : Math.min(3, sessions.length);
+  const show = sessions.slice(-maxShow);
+
+  list.innerHTML = show.map(s => {
+    const active = s.id === currentSessionId ? ' style="background:#0b1120"' : '';
+    const count = s.messages.filter(m => m.role === 'user').length;
+    return '<div class="history-item"' + active + '>'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;gap:4px">'
+      + '<span style="flex:1;overflow:hidden;cursor:pointer" onclick="switchSession(\'' + s.id + '\')">'
+      + '<span class="q">' + trunc(s.title, 18) + '</span>'
+      + ' <span style="font-size:10px;color:#475569">' + count + '条</span>'
+      + '</span>'
+      + '<button onclick="deleteSession(\'' + s.id + '\',event)" style="padding:1px 5px;border-radius:3px;border:none;background:transparent;color:#475569;font-size:10px;cursor:pointer;flex-shrink:0" title="删除">✕</button>'
+      + '</div></div>';
+  }).join('');
+
+  btn.style.display = sessions.length > 3 ? '' : 'none';
+  btn.textContent = _historyExpanded ? '收起' : '显示全部 (' + sessions.length + '条)';
+  saveSessions();
+}
+
+function exportChat() {
+  const session = getCurrentSession();
+  if (!session || !session.messages.length) { showToast('当前对话没有消息'); return; }
+  
+  // Build markdown
+  let md = '# AI-Brain RAG 对话\n> ' + session.title + '\n> 导出: ' + new Date().toLocaleString() + '\n\n';
+  session.messages.forEach(m => {
+    md += '## ' + (m.role === 'user' ? '👤 你' : '🤖 AI') + '\n\n' + stripHtml(m.content) + '\n\n---\n\n';
+  });
+  
+  // Download
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([md], { type: 'text/markdown' }));
+  a.download = 'ai-brain-rag-' + new Date().toISOString().slice(0,10) + '.md';
+  a.click();
+  
+  // Auto-delete after export
+  const idx = sessions.indexOf(session);
+  sessions.splice(idx, 1);
+  
+  if (sessions.length > 0) {
+    switchSession(sessions[Math.min(idx, sessions.length - 1)].id);
+  } else {
+    createSession();
+    renderSession(getCurrentSession());
+  }
+  renderHistory();
+  showToast('✅ 已导出，对话已自动删除');
 }
 
 async function sendQuestion(e) {
@@ -438,19 +633,44 @@ async function sendQuestion(e) {
   const text = input.value.trim();
   if (!text) return;
 
+  // Ensure we have a current session
+  let session = getCurrentSession();
+  if (!session) { initChat(); session = getCurrentSession(); }
+
   const base = document.getElementById('apiBase').value;
   const mode = document.getElementById('mode').value;
   const topK = parseInt(document.getElementById('topK').value) || 5;
   const folder = document.getElementById('folderFilter').value.trim() || null;
   const btn = document.getElementById('sendBtn');
 
-  addMessage('user', text);
-  chatHistory.push({ role: 'user', content: text });
-  updateHistory();
+  // Auto-name session from first question
+  if (session.messages.length === 0) {
+    session.title = trunc(text, 30);
+  }
+
+  // Add user message
+  const chat = document.getElementById('chat');
+  const empty = chat.querySelector('.empty-state');
+  if (empty) empty.remove();
+
+  const userDiv = document.createElement('div');
+  userDiv.className = 'msg user';
+  userDiv.innerHTML = '<div class="bubble">' + esc(text) + '</div>';
+  chat.appendChild(userDiv);
+  chat.scrollTop = chat.scrollHeight;
+  session.messages.push({ role: 'user', content: text });
+  renderHistory();
+
   input.value = ''; input.style.height = 'auto';
   btn.disabled = true;
 
-  const typingEl = addTyping();
+  // Typing indicator
+  const typingDiv = document.createElement('div');
+  typingDiv.className = 'msg assistant typing-msg';
+  typingDiv.innerHTML = '<div class="bubble"><div class="typing"><span></span><span></span><span></span></div></div>';
+  chat.appendChild(typingDiv);
+  chat.scrollTop = chat.scrollHeight;
+
   const mid = 'm' + (++msgIdCounter);
 
   try {
@@ -463,37 +683,68 @@ async function sendQuestion(e) {
     const latency = Math.round(performance.now() - t0);
     if (!res.ok) throw new Error('HTTP ' + res.status + ' (' + latency + 'ms)');
     const data = await res.json();
-    removeTyping(typingEl);
-    addAssistantMessage(data, mode, mid, latency);
-    chatHistory.push({ role: 'assistant', content: mode === 'ask' ? (data.answer || '') : (data.results?.length + ' results'), raw: data });
-    updateHistory();
+    typingDiv.remove();
+
+    // Build assistant message HTML
+    let bubbleHtml = '';
+    if (mode === 'search') {
+      const count = data.results?.length || 0;
+      bubbleHtml = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><strong>📋 搜索结果</strong><span style="font-size:12px;color:#64748b">' + count + ' 条 · ' + latency + 'ms</span></div>';
+      (data.results || []).forEach((r, i) => {
+        const pct = (r.score * 100).toFixed(1);
+        bubbleHtml += '<div class="search-result-card"><div class="header"><span class="idx">' + (i+1) + '</span><span class="score" style="color:' + (pct>70?'#22c55e':pct>40?'#f59e0b':'#64748b') + '">' + pct + '%</span><span class="filepath">' + esc(r.filepath) + '</span></div><div class="score-bar"><div class="fill" style="width:' + pct + '%"></div></div><div style="font-size:12px;color:#3b82f6;margin-bottom:4px">' + esc(r.heading) + '</div><div class="content-preview" id="p-' + mid + '-' + i + '">' + esc(r.content) + '</div><button class="toggle-preview" onclick="tp(\'p-' + mid + '-' + i + '\',this)">展开全文</button></div>';
+      });
+      if (!count) bubbleHtml += '<p style="color:#64748b;margin-top:8px">未找到相关结果。</p>';
+    } else {
+      const answer = data.answer || '*无回答*';
+      const refs = data.references || [];
+      bubbleHtml = marked(answer);
+      if (refs.length) {
+        bubbleHtml += '<details class="references" open><summary>📎 引用来源 (' + refs.length + ') · ' + latency + 'ms</summary>';
+        refs.forEach(r => {
+          const pct = (r.score * 100).toFixed(1);
+          bubbleHtml += '<div class="ref-item"><span class="score" style="color:' + (pct>70?'#22c55e':pct>40?'#f59e0b':'#64748b') + '">' + pct + '%</span><span class="path">' + esc(r.filepath) + '</span><span class="heading">' + esc(r.heading) + '</span><span class="preview">' + trunc(String(r.content||''),80) + '</span></div>';
+        });
+        bubbleHtml += '</details>';
+      }
+    }
+
+    const div = document.createElement('div');
+    div.className = 'msg assistant';
+    div.id = mid;
+    const actionsHtml = '<div class="msg-actions"><button onclick="copyMsg(\'' + mid + '\')" title="复制">📋</button></div>';
+    div.innerHTML = '<div class="bubble">' + actionsHtml + bubbleHtml + '</div>';
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+
+    session.messages.push({
+      role: 'assistant',
+      content: mode === 'ask' ? (data.answer || '') : JSON.stringify(data.results?.length + ' results'),
+      html: bubbleHtml,
+      _mid: msgIdCounter,
+    });
+    renderHistory();
   } catch (err) {
-    removeTyping(typingEl);
-    const msg = '❌ **错误**: ' + err.message + '\n\n> 确认 RAG API 正在运行：\n> `docker compose --env-file .env.local up -d`';
-    addMessage('assistant', msg);
-    chatHistory.push({ role: 'assistant', content: 'Error: ' + err.message });
-    updateHistory();
+    typingDiv.remove();
+    const session2 = getCurrentSession();
+    const errMsg = '❌ **错误**: ' + err.message + '\n\n> 确认 RAG API 正在运行：\n> `docker compose --env-file .env.local up -d`';
+    const chat = document.getElementById('chat');
+    const div = document.createElement('div');
+    div.className = 'msg assistant';
+    div.innerHTML = '<div class="bubble">' + marked(errMsg) + '</div>';
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+    if (session2) {
+      session2.messages.push({ role: 'assistant', content: 'Error: ' + err.message, html: marked(errMsg), _mid: ++msgIdCounter });
+      renderHistory();
+    }
   }
   btn.disabled = false;
   document.getElementById('input').focus();
 }
 
-function addMessage(role, content) {
-  const chat = document.getElementById('chat');
-  const empty = chat.querySelector('.empty-state');
-  if (empty) empty.remove();
-  const div = document.createElement('div');
-  div.className = 'msg ' + role;
-  div.innerHTML = '<div class="bubble">' + marked(content) + '</div>';
-  chat.appendChild(div);
-  chat.scrollTop = chat.scrollHeight;
-  return div;
-}
-
 function addSystemMessage(text) {
   const chat = document.getElementById('chat');
-  const empty = chat.querySelector('.empty-state');
-  if (empty) empty.remove();
   const div = document.createElement('div');
   div.className = 'msg system';
   div.innerHTML = '<div class="bubble">' + text + '</div>';
@@ -501,25 +752,6 @@ function addSystemMessage(text) {
   chat.scrollTop = chat.scrollHeight;
   setTimeout(() => div.remove(), 4000);
 }
-
-function addTyping() {
-  const chat = document.getElementById('chat');
-  const div = document.createElement('div');
-  div.className = 'msg assistant typing-msg';
-  div.innerHTML = '<div class="bubble"><div class="typing"><span></span><span></span><span></span></div></div>';
-  chat.appendChild(div);
-  chat.scrollTop = chat.scrollHeight;
-  return div;
-}
-
-function removeTyping(el) { if (el && el.parentNode) el.remove(); }
-
-function addAssistantMessage(data, mode, mid, latency) {
-  if (mode === 'search') {
-    const count = data.results?.length || 0;
-    let html = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><strong>📋 搜索结果</strong><span style="font-size:12px;color:#64748b">' + count + ' 条 · ' + latency + 'ms</span></div>';
-    (data.results || []).forEach((r, i) => {
-      const pct = (r.score * 100).toFixed(1);
       html += '<div class="search-result-card"><div class="header"><span class="idx">' + (i+1) + '</span><span class="score" style="color:' + (pct>70?'#22c55e':pct>40?'#f59e0b':'#64748b') + '">' + pct + '%</span><span class="filepath">' + esc(r.filepath) + '</span></div><div class="score-bar"><div class="fill" style="width:' + pct + '%"></div></div><div style="font-size:12px;color:#3b82f6;margin-bottom:4px">' + esc(r.heading) + '</div><div class="content-preview" id="p-' + mid + '-' + i + '">' + esc(r.content) + '</div><button class="toggle-preview" onclick="tp(\'p-' + mid + '-' + i + '\',this)">展开全文</button></div>';
     });
     if (!count) html += '<p style="color:#64748b;margin-top:8px">未找到相关结果。</p>';
@@ -619,7 +851,7 @@ function marked(text) {
   return h.startsWith('<') ? h : '<p>' + h + '</p>';
 }
 
-document.getElementById('input').focus();
+initChat();
 </script>
 </body>
 </html>
