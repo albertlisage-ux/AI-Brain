@@ -16,6 +16,7 @@
 | [[ui-ux-pro-max-skill\|UI/UX Pro Max]] | UI/UX 设计智能库 | `.codex/skills/ui-ux-pro-max/` |
 | [[linktec-skill\|LinkTec Skill]] | HydraTec/LinkTec 工业液压门户项目指南 | `.roo/skills/linktec/SKILL.md` |
 | [[linktec-frontend-taste\|LinkTec Frontend Taste]] | B2B 工业门户前端设计品质指南 | `.roo/skills/linktec/FRONTEND_TASTE.md` |
+| [[ai-rag-setup-guide\|AI RAG Setup Guide]] | 本地 RAG 系统配置与使用指南 | `ai-brain-rag/` |
 
 ## 预装 System Skills
 
