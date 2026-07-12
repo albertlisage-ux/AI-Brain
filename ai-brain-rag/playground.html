@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-Brain RAG Playground</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans SC", sans-serif;
+    background: #0f172a; color: #e2e8f0; min-height: 100vh; display: flex;
+  }
+  .sidebar {
+    width: 280px; background: #1e293b; padding: 20px; display: flex;
+    flex-direction: column; gap: 16px; border-right: 1px solid #334155;
+  }
+  .sidebar h1 { font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+  .sidebar h1 span { background: #3b82f6; font-size: 11px; padding: 2px 8px; border-radius: 4px; }
+  .sidebar label { font-size: 12px; color: #94a3b8; font-weight: 600; }
+  .sidebar input, .sidebar select {
+    padding: 8px 12px; border-radius: 6px; border: 1px solid #334155;
+    background: #0f172a; color: #e2e8f0; font-size: 13px;
+  }
+  .sidebar input:focus, .sidebar select:focus { outline: none; border-color: #3b82f6; }
+  .sidebar .hint { font-size: 11px; color: #64748b; }
+  .filter-group { display: flex; flex-direction: column; gap: 4px; }
+  .stat-box {
+    background: #0f172a; border-radius: 8px; padding: 12px; margin-top: auto;
+    font-size: 12px; color: #94a3b8;
+  }
+  .stat-box .num { color: #3b82f6; font-weight: 700; font-size: 18px; }
+  .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+  .toolbar {
+    display: flex; gap: 0; border-bottom: 1px solid #334155;
+    background: #1e293b;
+  }
+  .toolbar button {
+    flex: 1; padding: 12px; border: none; background: transparent;
+    color: #94a3b8; font-size: 13px; font-weight: 600; cursor: pointer;
+    transition: all .15s; border-bottom: 2px solid transparent;
+  }
+  .toolbar button:hover { color: #e2e8f0; background: #0f172a40; }
+  .toolbar button.active { color: #3b82f6; border-bottom-color: #3b82f6; background: #0f172a60; }
+  .chat-area { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+  .msg { max-width: 800px; animation: fadeIn .2s; }
+  .msg.user { align-self: flex-end; }
+  .msg.user .bubble { background: #3b82f6; color: #fff; border-radius: 16px 16px 4px 16px; }
+  .msg.assistant .bubble { background: #1e293b; border: 1px solid #334155; border-radius: 16px 16px 16px 4px; }
+  .bubble { padding: 12px 16px; line-height: 1.6; font-size: 14px; }
+  .bubble p { margin-bottom: 8px; }
+  .bubble p:last-child { margin-bottom: 0; }
+  .bubble code {
+    background: #0f172a; padding: 1px 5px; border-radius: 4px; font-size: 13px; color: #f472b6;
+  }
+  .bubble pre {
+    background: #0f172a; padding: 12px; border-radius: 8px; overflow-x: auto;
+    margin: 8px 0; font-size: 13px; border: 1px solid #334155;
+  }
+  .references { margin-top: 8px; border-top: 1px solid #334155; padding-top: 8px; }
+  .references summary { cursor: pointer; font-size: 12px; color: #64748b; font-weight: 600; }
+  .ref-item {
+    display: flex; align-items: center; gap: 8px; padding: 6px 8px;
+    margin-top: 4px; background: #0f172a; border-radius: 6px; font-size: 12px;
+  }
+  .ref-item .score { color: #22c55e; font-weight: 600; font-size: 11px; min-width: 36px; }
+  .ref-item .path { color: #94a3b8; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ref-item .heading { color: #3b82f6; }
+  .ref-item .preview { display: block; color: #64748b; font-size: 11px; margin-top: 2px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .input-bar {
+    display: flex; gap: 8px; padding: 12px 20px; background: #1e293b;
+    border-top: 1px solid #334155;
+  }
+  .input-bar textarea {
+    flex: 1; padding: 10px 14px; border-radius: 8px; border: 1px solid #334155;
+    background: #0f172a; color: #e2e8f0; font-size: 14px; resize: none;
+    min-height: 44px; max-height: 120px; line-height: 1.4;
+  }
+  .input-bar textarea:focus { outline: none; border-color: #3b82f6; }
+  .input-bar button {
+    padding: 10px 20px; border-radius: 8px; border: none; background: #3b82f6;
+    color: #fff; font-weight: 600; cursor: pointer; font-size: 14px;
+    transition: background .15s; white-space: nowrap;
+  }
+  .input-bar button:hover { background: #2563eb; }
+  .input-bar button:disabled { background: #475569; cursor: not-allowed; }
+  .typing { display: flex; gap: 4px; align-items: center; padding: 4px 0; }
+  .typing span { width: 6px; height: 6px; background: #64748b; border-radius: 50%;
+    animation: bounce 1.2s infinite; }
+  .typing span:nth-child(2) { animation-delay: .2s; }
+  .typing span:nth-child(3) { animation-delay: .4s; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes bounce { 0%,80%,100% { transform: translateY(0); } 40% { transform: translateY(-8px); } }
+  .empty-state {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; color: #475569; gap: 12px;
+  }
+  .empty-state .icon { font-size: 48px; }
+  .empty-state h2 { font-size: 18px; color: #64748b; }
+  .empty-state p { font-size: 13px; text-align: center; max-width: 400px; }
+  kbd {
+    background: #1e293b; border: 1px solid #334155; border-radius: 4px;
+    padding: 1px 5px; font-size: 11px; color: #94a3b8;
+  }
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <h1>🧠 AI-Brain <span>RAG</span></h1>
+
+  <label>API 地址</label>
+  <input id="apiBase" value="http://localhost:8000" placeholder="http://localhost:8000">
+
+  <label>模式</label>
+  <select id="mode">
+    <option value="ask">🔍 /ask — 搜索 + DeepSeek 回答</option>
+    <option value="search">📋 /search — 仅搜索，不调用 AI</option>
+  </select>
+
+  <div class="filter-group">
+    <label>文件夹过滤（可选）</label>
+    <input id="folderFilter" placeholder="例如: 03 Skills">
+    <span class="hint">留空搜索全部</span>
+  </div>
+
+  <div class="filter-group">
+    <label>返回数量 (top_k)</label>
+    <input id="topK" type="number" value="5" min="1" max="20">
+  </div>
+
+  <div class="stat-box" id="stats">
+    <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+      <span>向量总数</span>
+      <span class="num" id="pointCount">-</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:11px">
+      <span>模型</span>
+      <span id="modelName" style="color:#e2e8f0">-</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:11px;margin-top:4px">
+      <span>状态</span>
+      <span id="healthStatus" style="color:#e2e8f0">-</span>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="toolbar">
+    <button class="active" data-tab="chat" onclick="switchTab('chat')">💬 对话</button>
+    <button data-tab="api" onclick="switchTab('api')">📖 API 参考</button>
+  </div>
+
+  <!-- Chat Tab -->
+  <div id="tab-chat" class="tab-content" style="display:flex;flex-direction:column;flex:1;min-height:0">
+    <div class="chat-area" id="chat">
+      <div class="empty-state">
+        <div class="icon">💡</div>
+        <h2>向你的知识库提问</h2>
+        <p>例如：<br>「Kafka 重试策略是什么？」<br>「PDF Skill 怎么用？」<br>「LinkTech 项目的前端设计规则」</p>
+      </div>
+    </div>
+    <form class="input-bar" id="form" onsubmit="return sendQuestion(event)">
+      <textarea id="input" placeholder="输入问题…" rows="1" oninput="autoResize(this)"></textarea>
+      <button id="sendBtn">发送</button>
+    </form>
+  </div>
+
+  <!-- API Tab -->
+  <div id="tab-api" class="tab-content" style="display:none;padding:24px;overflow-y:auto;flex:1">
+    <div style="max-width:700px">
+      <h2 style="font-size:20px;margin-bottom:16px">📖 API 参考</h2>
+
+      <div class="bubble" style="background:#1e293b;border:1px solid #334155;margin-bottom:16px">
+        <h3 style="font-size:14px;margin-bottom:8px;color:#3b82f6">POST /search</h3>
+        <p style="font-size:13px;color:#94a3b8;margin-bottom:8px">语义搜索，不调用 DeepSeek</p>
+        <pre style="background:#0f172a;padding:12px;border-radius:6px;font-size:13px;overflow-x:auto">curl http://localhost:8000/search \
+  -H "Content-Type: application/json" \
+  -d '{
+    "question": "Kafka 重试策略",
+    "top_k": 5,
+    "filters": {"folder": "03 Skills"}
+  }'</pre>
+      </div>
+
+      <div class="bubble" style="background:#1e293b;border:1px solid #334155;margin-bottom:16px">
+        <h3 style="font-size:14px;margin-bottom:8px;color:#3b82f6">POST /ask</h3>
+        <p style="font-size:13px;color:#94a3b8;margin-bottom:8px">搜索 + DeepSeek 生成回答</p>
+        <pre style="background:#0f172a;padding:12px;border-radius:6px;font-size:13px;overflow-x:auto">curl http://localhost:8000/ask \
+  -H "Content-Type: application/json" \
+  -d '{
+    "question": "Kafka 重试策略是什么？",
+    "top_k": 5
+  }'</pre>
+      </div>
+
+      <div class="bubble" style="background:#1e293b;border:1px solid #334155;margin-bottom:16px">
+        <h3 style="font-size:14px;margin-bottom:8px;color:#3b82f6">GET /health</h3>
+        <pre style="background:#0f172a;padding:12px;border-radius:6px;font-size:13px">curl http://localhost:8000/health</pre>
+      </div>
+
+      <div class="bubble" style="background:#1e293b;border:1px solid #334155">
+        <h3 style="font-size:14px;margin-bottom:8px;color:#3b82f6">GET /stats</h3>
+        <pre style="background:#0f172a;padding:12px;border-radius:6px;font-size:13px">curl http://localhost:8000/stats</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// === Tab switching ===
+function switchTab(name) {
+  document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+  document.querySelectorAll('[data-tab]').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + name).style.display = 'flex';
+  document.querySelector(`[data-tab="${name}"]`).classList.add('active');
+}
+
+// === Auto-resize textarea ===
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+// === Keyboard shortcut ===
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    const input = document.getElementById('input');
+    if (document.activeElement === input) {
+      e.preventDefault();
+      document.getElementById('form').dispatchEvent(new Event('submit'));
+    }
+  }
+});
+
+// === Fetch stats on load ===
+async function refreshStats() {
+  const base = document.getElementById('apiBase').value;
+  try {
+    const [healthRes, statsRes] = await Promise.all([
+      fetch(base + '/health').then(r => r.json()).catch(() => null),
+      fetch(base + '/stats').then(r => r.json()).catch(() => null),
+    ]);
+    if (statsRes) {
+      document.getElementById('pointCount').textContent = statsRes.total_points ?? '?';
+      document.getElementById('modelName').textContent = statsRes.embedding_model?.split('/').pop() ?? '-';
+    }
+    if (healthRes) {
+      const status = document.getElementById('healthStatus');
+      status.textContent = healthRes.status === 'ok' ? '✅ 正常' : '⚠️ ' + (healthRes.status || '异常');
+      status.style.color = healthRes.status === 'ok' ? '#22c55e' : '#f59e0b';
+    }
+  } catch { /* ignore */ }
+}
+refreshStats();
+setInterval(refreshStats, 10000);
+
+// === Send question ===
+async function sendQuestion(e) {
+  e.preventDefault();
+  const input = document.getElementById('input');
+  const text = input.value.trim();
+  if (!text) return;
+
+  const base = document.getElementById('apiBase').value;
+  const mode = document.getElementById('mode').value;
+  const topK = parseInt(document.getElementById('topK').value) || 5;
+  const folder = document.getElementById('folderFilter').value.trim() || null;
+  const btn = document.getElementById('sendBtn');
+
+  // Add user message
+  addMessage('user', text);
+  input.value = '';
+  input.style.height = 'auto';
+  btn.disabled = true;
+
+  // Add typing indicator
+  const typingId = addTyping();
+
+  try {
+    const body = { question: text, top_k: topK };
+    if (folder) body.filters = { folder };
+
+    const res = await fetch(base + '/' + mode, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+
+    if (!res.ok) {
+      const errText = await res.text().catch(() => 'Unknown error');
+      throw new Error(`HTTP ${res.status}: ${errText}`);
+    }
+
+    const data = await res.json();
+    removeTyping(typingId);
+    addAssistantMessage(data, mode);
+  } catch (err) {
+    removeTyping(typingId);
+    addMessage('assistant', `❌ **错误**: ${err.message}\n\n> 请确认 RAG API 正在运行：\n> \`cd ai-brain-rag && docker compose --env-file .env.local up -d\``);
+  }
+
+  btn.disabled = false;
+  document.getElementById('input').focus();
+}
+
+// === Message helpers ===
+function addMessage(role, content) {
+  const chat = document.getElementById('chat');
+  const empty = chat.querySelector('.empty-state');
+  if (empty) empty.remove();
+
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  div.innerHTML = `<div class="bubble">${marked(content)}</div>`;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+  return div;
+}
+
+function addTyping() {
+  const chat = document.getElementById('chat');
+  const div = document.createElement('div');
+  div.className = 'msg assistant typing-msg';
+  div.innerHTML = `<div class="bubble"><div class="typing"><span></span><span></span><span></span></div></div>`;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+  return div;
+}
+
+function removeTyping(id) {
+  const el = document.querySelector('.typing-msg');
+  if (el) el.remove();
+}
+
+function addAssistantMessage(data, mode) {
+  if (mode === 'search') {
+    const count = data.results?.length || 0;
+    let text = `找到 **${count}** 条相关结果：\n\n`;
+    (data.results || []).forEach((r, i) => {
+      text += `**${i + 1}. [${r.title}](${r.filepath})**  — 相似度: ${(r.score * 100).toFixed(1)}%\n`;
+      text += `> ${r.folder} / ${r.heading}\n`;
+      text += `> ${truncate(r.content, 150)}\n\n`;
+    });
+    if (count === 0) text = '未找到相关结果。';
+    addMessage('assistant', text);
+  } else {
+    const answer = data.answer || '*无回答*';
+    const refs = data.references || [];
+    let html = answer;
+    if (refs.length > 0) {
+      html += `\n\n<details class="references"><summary>📎 引用来源 (${refs.length})</summary>`;
+      refs.forEach(r => {
+        const score = (r.score * 100).toFixed(1);
+        html += `<div class="ref-item">
+          <span class="score">${score}%</span>
+          <span class="path">${r.filepath}</span>
+          <span class="heading">${r.heading}</span>
+          <span class="preview">${truncate(r.content, 80)}</span>
+        </div>`;
+      });
+      html += `</details>`;
+    }
+    const div = document.createElement('div');
+    div.className = 'msg assistant';
+    div.innerHTML = `<div class="bubble">${marked(html)}</div>`;
+    document.getElementById('chat').appendChild(div);
+    document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
+  }
+}
+
+function truncate(s, n) {
+  return s && s.length > n ? s.slice(0, n) + '…' : (s || '');
+}
+
+// === Minimal Markdown renderer ===
+function marked(text) {
+  let html = text
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/^### (.+)$/gm, '<h3 style="font-size:14px;margin:8px 0 4px;color:#3b82f6">$1</h3>')
+    .replace(/^## (.+)$/gm, '<h2 style="font-size:16px;margin:12px 0 4px;color:#60a5fa">$1</h2>')
+    .replace(/^# (.+)$/gm, '<h1 style="font-size:18px;margin:12px 0 4px;color:#93c5fd">$1</h1>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/^- (.+)$/gm, '<li style="margin-left:16px">$1</li>')
+    .replace(/\n>/gm, '<br>&gt;')
+    .replace(/^> (.+)$/gm, '<blockquote style="border-left:3px solid #3b82f6;padding-left:12px;color:#94a3b8;margin:4px 0">$1</blockquote>')
+    .replace(/\n{2,}/g, '</p><p>')
+    .replace(/^(.+)$/gm, function(m) {
+      if (m.startsWith('<')) return m;
+      return m;
+    });
+  return '<p>' + html + '</p>';
+}
+
+// Initial focus
+document.getElementById('input').focus();
+</script>
+</body>
+</html>
