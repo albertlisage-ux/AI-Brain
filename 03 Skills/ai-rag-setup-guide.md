@@ -10,15 +10,18 @@ graph TB
         OV[Obsidian Vault<br/>.md 文件]
     end
 
+    subgraph "宿主机 (macOS)"
+        IDX[Indexer<br/>pip install qdrant-client]
+        OLLAMA[Ollama<br/>nomic-embed-text<br/>Metal GPU]
+    end
+
     subgraph "Docker 服务"
-        IDX[Indexer<br/>扫描→切片→嵌入]
         QD[Qdrant<br/>向量数据库]
         API[RAG API<br/>FastAPI]
         MCP[MCP Server<br/>SSE 传输]
     end
 
     subgraph "AI 模型"
-        EMB[Embedding<br/>multilingual-e5-small]
         LLM[DeepSeek API]
     end
 
@@ -27,10 +30,10 @@ graph TB
         VS[VS Code / Codex]
     end
 
-    OV -->|只读挂载| IDX
-    IDX -->|向量| QD
-    EMB -.-> IDX
-    EMB -.-> API
+    OV -->|扫描 .md| IDX
+    IDX -->|HTTP API| OLLAMA
+    OLLAMA -->|768d 向量| IDX
+    IDX -->|Upsert| QD
     API -->|检索| QD
     API -->|问答| LLM
     PG -->|HTTP| API
@@ -42,43 +45,44 @@ graph TB
 
 | 工具 | 版本要求 | 用途 |
 |------|---------|------|
-| Docker & Docker Compose | ≥ 24.0 | 运行所有服务 |
+| Docker & Docker Compose | ≥ 24.0 | Qdrant + API + MCP 服务 |
 | DeepSeek API Key | - | LLM 问答 |
+| Ollama | ≥ 0.31 | 本地嵌入模型（Metal GPU 加速） |
 | Obsidian Vault | - | 知识库源 |
 
 ## 目录结构
 
 ```
 ai-brain-rag/
-├── docker-compose.yml     ← 4 服务编排
-├── .env                   ← 环境变量模板（版本管理）
+├── docker-compose.yml     ← 3 服务编排（不含 indexer）
+├── .env                   ← 环境变量模板
 ├── .env.local             ← 本地配置（已 gitignore）
+├── run-indexer-host.sh    ← 宿主机索引器启动脚本
 │
-├── indexer/               ← 自动索引服务
+├── indexer/               ← 索引器（宿主机运行）
 │   ├── Dockerfile
 │   ├── config.py          ← 配置读取
 │   ├── scanner.py         ← 扫描 vault，SHA256 哈希检测
 │   ├── chunker.py         ← 按标题/段落切片（500字，50字重叠）
-│   ├── embedder.py        ← 本地嵌入模型调用
-│   └── indexer.py         ← 主循环：扫描→切片→嵌入→Upsert
+│   ├── embedder.py        ← Ollama API 调用
+│   └── indexer.py         ← 主循环：逐文件 chunk→embed→upsert
 │
 ├── rag-api/               ← HTTP 查询接口
 │   ├── Dockerfile
 │   ├── main.py            ← FastAPI 应用
-│   ├── retriever.py       ← Qdrant 搜索
+│   ├── retriever.py       ← Qdrant 搜索（Ollama 嵌入查询）
 │   ├── responder.py       ← DeepSeek API 调用
 │   └── models.py          ← 请求/响应模型
 │
 ├── mcp-server/            ← MCP 协议服务
 │   ├── Dockerfile
 │   ├── server.py          ← FastMCP + SSE 传输
-│   └── tools.py           ← 5 个工具实现
+│   └── tools.py           ← 5 个工具（Ollama 嵌入查询）
 │
 ├── playground.html        ← 浏览器测试页面
 │
 └── data/
-    ├── qdrant/            ← 向量持久化（挂载卷）
-    └── model-cache/       ← 嵌入模型缓存（挂载卷）
+    └── qdrant/            ← 向量持久化（挂载卷）
 ```
 
 ## 启动步骤
@@ -102,50 +106,14 @@ bash run-indexer-host.sh
 
 首次运行会自动创建 Python venv 并安装依赖。
 
-### 方案 B：全 Docker（备选）
+### 方案 B：全 Docker（备选，不推荐）
 
-### 1. 配置环境变量
-
-```bash
-cd ai-brain-rag
-cp .env .env.local
-```
-
-编辑 `.env.local`，填入必要参数：
+> ⚠️ Docker 内运行 indexer 无法使用 GPU，速度极慢。仅在没有 Ollama 的环境使用。
 
 ```bash
-# 你的 Obsidian Vault 路径
-OBSIDIAN_VAULT_PATH=/Users/yuanzhe/Knowledge/AI-Brain
-
-# DeepSeek API
-DEEPSEEK_API_KEY=sk-your-key-here
-DEEPSEEK_API_BASE=https://api.deepseek.com
-DEEPSEEK_MODEL=deepseek-chat
-
-# 嵌入模型
-EMBEDDING_MODEL=intfloat/multilingual-e5-small
-EMBEDDING_DIM=384
-```
-
-### 2. 启动所有服务
-
-```bash
+# 先把 docker-compose.yml 中的 indexer 注释去掉
+# 然后:
 docker compose --env-file .env.local up -d
-```
-
-首次启动会下载模型文件（约 200MB），需要几分钟。
-
-### 3. 验证服务
-
-```bash
-# 查看状态
-docker compose ps
-
-# 健康检查
-curl http://localhost:8000/health
-
-# 统计信息
-curl http://localhost:8000/stats
 ```
 
 预期输出：
@@ -158,25 +126,50 @@ curl http://localhost:8000/stats
 {"total_points":42,"collections":["ai-brain"],"embedding_model":"multilingual-e5-small","deepseek_model":"deepseek-chat"}
 ```
 
-## 索引器工作机制
+## 索引器工作机制（宿主机模式）
+
+索引器在 **宿主机** 直接运行（不是 Docker 内），通过 HTTP 调用 Ollama 获得 Metal GPU 加速。
 
 ```
 每 30 秒循环:
-  1. 扫描 vault 所有 .md 文件
+  1. 扫描 vault 所有 .md 文件（排除 .obsidian/ .git/ node_modules/ 等）
   2. 计算每个文件的 SHA256 哈希
   3. 对比上次记录，找出新增/修改/删除
-  4. 新增/修改文件：
+  4. 逐文件处理（chunk → embed → upsert，非批量）：
      a. 按标题层级切片（H1/H2/H3 感知）
      b. 超出 500 字的段落再切分（50 字重叠）
-     c. 生成嵌入向量
+     c. 调用 Ollama API (/api/embed) 生成 768 维向量
      d. Upsert 到 Qdrant
   5. 删除文件：从 Qdrant 移除对应向量
   6. 保存哈希状态
 ```
 
-**排除规则**：自动忽略 `.obsidian`、`.git`、`node_modules`、`__pycache__`、`Attachments/`、`99 Archive/` 目录。
+宿主机 vs Docker 对比：
 
-## API 使用
+| 对比项 | Docker indexer | 宿主机模式 ✅ |
+|--------|---------------|-------------|
+| 嵌入硬件 | CPU 模拟 | Metal GPU |
+| 49 文件处理时间 | 44 分钟卡死 | **10.2 秒** |
+| 内存占用 | ~500MB | ~50MB |
+| 依赖安装 | 内置 Dockerfile | `pip install qdrant-client` |
+
+## 嵌入模型说明
+
+通过 Ollama 使用 `nomic-embed-text`：
+
+| 属性 | 值 |
+|------|-----|
+| 向量维度 | 768 |
+| 语言 | 多语言（含中文） |
+| 大小 | ~274MB |
+| 硬件加速 | Apple Silicon Metal GPU |
+| 每批速度 | **~16-29 ms/chunk** |
+
+切换模型：
+```bash
+ollama pull <其他模型名>        # 下载新模型
+# 然后修改 run-indexer-host.sh 中的 OLLAMA_EMBED_MODEL
+```
 
 ### POST /search — 语义搜索
 
@@ -361,33 +354,44 @@ open http://localhost:6333/dashboard
 ## 服务管理
 
 ```bash
+# 启动 Docker 服务（3 个容器）
+cd ai-brain-rag
+docker compose --env-file .env.local up -d
+
 # 查看日志
-docker compose logs -f          # 全部
-docker compose logs -f indexer  # 仅索引器
+docker compose logs -f              # 全部
+docker compose logs -f rag-api      # 仅 API
 
-# 重启单个服务
-docker compose restart rag-api
+# 启动/停止宿主机索引器
+bash run-indexer-host.sh            # 前台运行，Ctrl+C 停止
+# 或后台运行:
+# nohup bash run-indexer-host.sh > /tmp/indexer.log 2>&1 &
 
-# 停止
+# 验证索引状态
+curl http://localhost:8000/stats    # 看 total_points
+
+# 强制重新索引全部文件
+docker exec ai-brain-indexer rm -f /tmp/indexer_state.json 2>/dev/null
+# 或者（如果用了宿主机模式）:
+rm -f /tmp/indexer_state.json
+bash run-indexer-host.sh
+
+# 重启 Docker 服务
+docker compose restart
+
+# 停止所有
 docker compose down
-
-# 停止并删除数据（危险！）
-docker compose down -v
-
-# 重建特定服务
-docker compose build mcp-server
-docker compose up -d mcp-server
 ```
 
 ## 排错指南
 
 | 症状 | 原因 | 解决 |
 |------|------|------|
-| Qdrant unhealthy | 容器无 curl | 使用 `bash /dev/tcp` healthcheck（已修复） |
-| MCP Server 重启 | SDK API 变更 | 使用 FastMCP + SSE 传输（已修复） |
-| 索引器报连接拒绝 | Qdrant 还没 ready | healthcheck 已加 `start_period: 15s` |
-| 模型下载慢 | 首次下载 | 耐心等待，缓存到 `data/model-cache/` |
-| playground 连不上 | API 端口不对 | 检查 `docker compose ps` 确认 8000 已映射 |
+| Ollama 连接失败 | Ollama 未运行 | `brew services start ollama` |
+| Qdrant 连不上 | Docker 未启动 | `docker compose --env-file .env.local up -d` |
+| 索引器报 0 个文件 | 路径配置错误 | 检查 `run-indexer-host.sh` 中的 `OBSIDIAN_VAULT` |
+| 向量数为 0 | 首次索引还没跑完 | 等 30 秒再看 `curl :8000/stats` |
+| playground 连不上 | API 端口不对 | `docker compose ps` 确认 8000 已映射 |
 
 ## 相关文档
 
