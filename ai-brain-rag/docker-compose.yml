@@ -17,27 +17,9 @@ services:
       retries: 10
       start_period: 15s
 
-  indexer:
-    build:
-      context: ./indexer
-      dockerfile: Dockerfile
-    container_name: ai-brain-indexer
-    restart: unless-stopped
-    depends_on:
-      qdrant:
-        condition: service_healthy
-    volumes:
-      - ${OBSIDIAN_VAULT_PATH:-.}:/vault:ro
-    environment:
-      - QDRANT_HOST=qdrant
-      - QDRANT_PORT=6333
-      - QDRANT_COLLECTION=ai-brain
-      - OBSIDIAN_VAULT=/vault
-      - OLLAMA_HOST=http://host.docker.internal:11434
-      - OLLAMA_EMBED_MODEL=nomic-embed-text
-      - SCAN_INTERVAL=${SCAN_INTERVAL:-30}
-      - CHUNK_SIZE=${CHUNK_SIZE:-500}
-      - CHUNK_OVERLAP=${CHUNK_OVERLAP:-50}
+  # indexer 改为在宿主机直接运行（利用 Ollama Metal GPU 加速）
+  # 启动方式: bash run-indexer-host.sh
+  # 详见 ai-rag-setup-guide.md#宿主机模式
 
   rag-api:
     build:

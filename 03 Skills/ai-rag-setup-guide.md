@@ -83,6 +83,27 @@ ai-brain-rag/
 
 ## 启动步骤
 
+### 方案 A：宿主机模式（推荐 🚀）
+
+索引器在宿主机运行，直接调用 Ollama Metal GPU，速度比 Docker 内快 10 倍。
+
+```bash
+# 1. 启动 Docker 服务（Qdrant + API + MCP，不含 indexer）
+cd ai-brain-rag
+docker compose --env-file .env.local up -d qdrant rag-api mcp-server
+
+# 2. 确认 Ollama 已运行
+brew services start ollama
+ollama pull nomic-embed-text
+
+# 3. 启动宿主机索引器
+bash run-indexer-host.sh
+```
+
+首次运行会自动创建 Python venv 并安装依赖。
+
+### 方案 B：全 Docker（备选）
+
 ### 1. 配置环境变量
 
 ```bash
