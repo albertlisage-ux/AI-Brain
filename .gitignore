@@ -10,3 +10,9 @@ Thumbs.db
 # Temp
 tmp/
 temp/
+
+# RAG data (large files, not committed)
+ai-brain-rag/data/qdrant/
+ai-brain-rag/data/model-cache/
+ai-brain-rag/.env
+ai-brain-rag/.env.local

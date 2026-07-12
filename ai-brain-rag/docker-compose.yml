@@ -1,0 +1,88 @@
+services:
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: ai-brain-qdrant
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:6333:6333"   # REST API
+      - "127.0.0.1:6334:6334"   # gRPC
+    volumes:
+      - ./data/qdrant:/qdrant/storage:delegated
+    environment:
+      - QDRANT__SERVICE__GRPC_PORT=6334
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6333/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  indexer:
+    build:
+      context: ./indexer
+      dockerfile: Dockerfile
+    container_name: ai-brain-indexer
+    restart: unless-stopped
+    depends_on:
+      qdrant:
+        condition: service_healthy
+    volumes:
+      - ${OBSIDIAN_VAULT_PATH:-.}:/vault:ro
+      - ./data/model-cache:/model-cache:delegated
+    environment:
+      - QDRANT_HOST=qdrant
+      - QDRANT_PORT=6333
+      - QDRANT_COLLECTION=ai-brain
+      - OBSIDIAN_VAULT=/vault
+      - EMBEDDING_MODEL=${EMBEDDING_MODEL:-BAAI/bge-small-zh-v1.5}
+      - EMBEDDING_DIM=${EMBEDDING_DIM:-512}
+      - SCAN_INTERVAL=${SCAN_INTERVAL:-30}
+      - CHUNK_SIZE=${CHUNK_SIZE:-500}
+      - CHUNK_OVERLAP=${CHUNK_OVERLAP:-50}
+      - HF_HOME=/model-cache
+      - HF_HUB_DOWNLOAD_TIMEOUT=120
+
+  rag-api:
+    build:
+      context: ./rag-api
+      dockerfile: Dockerfile
+    container_name: ai-brain-rag-api
+    restart: unless-stopped
+    depends_on:
+      qdrant:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      - QDRANT_HOST=qdrant
+      - QDRANT_PORT=6333
+      - QDRANT_COLLECTION=ai-brain
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY:-}
+      - DEEPSEEK_API_BASE=${DEEPSEEK_API_BASE:-https://api.deepseek.com}
+      - DEEPSEEK_MODEL=${DEEPSEEK_MODEL:-deepseek-chat}
+      - EMBEDDING_MODEL=${EMBEDDING_MODEL:-BAAI/bge-small-zh-v1.5}
+      - EMBEDDING_DIM=${EMBEDDING_DIM:-512}
+      - HF_HOME=/model-cache
+    volumes:
+      - ./data/model-cache:/model-cache:delegated
+
+  mcp-server:
+    build:
+      context: ./mcp-server
+      dockerfile: Dockerfile
+    container_name: ai-brain-mcp-server
+    restart: unless-stopped
+    depends_on:
+      qdrant:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8100:8100"
+    environment:
+      - QDRANT_HOST=qdrant
+      - QDRANT_PORT=6333
+      - QDRANT_COLLECTION=ai-brain
+      - EMBEDDING_MODEL=${EMBEDDING_MODEL:-BAAI/bge-small-zh-v1.5}
+      - EMBEDDING_DIM=${EMBEDDING_DIM:-512}
+      - HF_HOME=/model-cache
+    volumes:
+      - ./data/model-cache:/model-cache:delegated
+      - ${OBSIDIAN_VAULT_PATH:-.}:/vault:ro
