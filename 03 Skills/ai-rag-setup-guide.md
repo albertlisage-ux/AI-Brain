@@ -230,6 +230,109 @@ curl http://localhost:8000/stats
 
 切换模型只需修改 `.env` 中的 `EMBEDDING_MODEL` 和 `EMBEDDING_DIM`。
 
+## 日常使用
+
+### 方式一：浏览器 Playground（推荐）
+
+打开 `ai-brain-rag/playground.html`，这是最直观的使用方式：
+
+1. 在左侧栏确认 API 地址为 `http://localhost:8000`
+2. 选择模式：
+   - **/ask** — 搜索笔记 + DeepSeek 生成回答（默认）
+   - **/search** — 仅搜索相关笔记，不调 AI
+3. 可选：按文件夹过滤（如 `03 Skills`、`05 Architecture`）
+4. 在输入框提问，按 `Enter` 发送
+
+**示例问题**：
+
+```
+PDF Skill 怎么用？
+LinkTech 项目的前端设计规则有哪些？
+Kafka 重试策略是什么？
+Codex 的架构是怎样的？
+Taste Skill 的三个旋钮是什么？
+03 Skills 里有哪些安全相关的技能？
+```
+
+### 方式二：命令行 curl
+
+适合脚本集成或快速测试：
+
+```bash
+# 快速搜索
+curl -s http://localhost:8000/search \
+  -H "Content-Type: application/json" \
+  -d '{"question": "PDF Skill", "top_k": 3}' | jq .
+
+# 只看指定文件夹
+curl -s http://localhost:8000/search \
+  -H "Content-Type: application/json" \
+  -d '{"question": "部署", "top_k": 3, "filters": {"folder": "05 Architecture"}}'
+
+# AI 问答
+curl -s http://localhost:8000/ask \
+  -H "Content-Type: application/json" \
+  -d '{"question": "LinkTech 项目用什么技术栈？"}' | jq .answer
+```
+
+> 💡 搭配 `jq` 可以格式化输出。安装：`brew install jq`
+
+### 方式三：VS Code / Codex MCP 集成
+
+配置 MCP 后（见上方 MCP 配置节），在 VS Code 或 Codex 中可以直接提问：
+
+```
+@ai-brain 搜索 "Kafka 重试策略"
+@ai-brain 帮我读取 03 Skills/taste-skill.md
+@ai-brain 列出 05 Architecture 下的所有笔记
+@ai-brain 获取 LinkTech-hydraulic 项目上下文
+```
+
+Codex Agent 会自动调用 `search_knowledge`、`read_note` 等工具来回答。
+
+### 方式四：API 集成到其他工具
+
+RAG API 是标准 HTTP 接口，可以集成到：
+
+- **Raycast** — 用 Script 插件搜索知识库
+- **Alfred** — 用 Workflow 调用 `/search`
+- **终端 alias** — 加到 `.zshrc`：
+
+```bash
+alias kb="curl -s http://localhost:8000/search -H 'Content-Type: application/json' -d '{\"question\":\"\$*\",\"top_k\":5}' | jq ."
+```
+
+用法：`kb "Kafka 重试"`
+
+## 查询技巧
+
+| 目标 | 做法 |
+|------|------|
+| 搜指定领域 | 加 `filters: {"folder": "03 Skills"}` |
+| 搜项目相关内容 | `filters: {"folder": "02 Projects/LinkTech-hydraulic"}` |
+| 快速扫读 | 用 `/search`（不调 AI），只看标题和摘要 |
+| 深度理解 | 用 `/ask`，让 DeepSeek 综合多篇笔记回答 |
+| 确认索引进度 | `curl http://localhost:8000/stats` 看 total_points |
+| 验证最新笔记已索引 | 修改后等 30 秒，再搜索验证 |
+
+## 日常维护
+
+```bash
+# 查看索引器是否在工作
+docker compose logs indexer --tail 20
+
+# 查看向量数量
+curl http://localhost:8000/stats
+
+# 强制重新索引全部文件
+# （删除 state 文件后重启 indexer）
+docker compose exec indexer rm -f /tmp/indexer_state.json
+docker compose restart indexer
+
+# 查看 Qdrant  dashboard
+open http://localhost:6333/dashboard
+```
+
 ## 浏览器测试
 
 打开 `playground.html` 即可使用图形界面测试。
