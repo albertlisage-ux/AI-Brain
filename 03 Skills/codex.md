@@ -1,6 +1,7 @@
 # Skills 索引
 
 > 源自 Codex (`~/.codex/skills/`) 的技能体系，2026-07-12 导入
+> 🧠 [[ai-rag-setup-guide\|AI RAG 系统配置指南]] — 本地语义搜索 + DeepSeek 问答
 
 ## 用户安装的 Skills
 
@@ -60,3 +61,4 @@ graph TD
 - [[../06 Decisions/taste-skill-design-philosophy|Taste Skill 设计理念]]
 - [[../07 Lessons/codex-lessons|使用经验与注意事项]]
 - [[../00 Inbox/codex-import-2026-07-12|导入记录]]
+- [[ai-rag-setup-guide|🧠 AI RAG 系统配置指南]]
