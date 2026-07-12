@@ -13,7 +13,7 @@ def build_prompt(question: str, context_chunks: list[dict]) -> str:
 
     context_str = "\n\n".join(context_parts)
 
-    prompt = f"""You are an AI assistant with access to a personal knowledge base. Answer the question based on the provided context. If the context doesn't contain enough information, say so clearly. Always cite the source file and heading.
+    prompt = f"""You are an AI assistant with access to a personal knowledge base. Answer based on the provided context. If context is insufficient, say so. Do NOT list source citations in your answer — the UI will show them separately.
 
 ## Context
 

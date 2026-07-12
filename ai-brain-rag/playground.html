@@ -387,7 +387,7 @@ function updateHistory() {
     return;
   }
   list.innerHTML = chatHistory.map((m, i) => m.role === 'user'
-    ? `<div class="history-item" onclick="document.querySelectorAll('.msg')[${i}]?.scrollIntoView({behavior:'smooth',block:'center'})">👤 <span class="q">${truncate(stripHtml(m.content).replace(/\n/g,' '), 36)}</span></div>`
+    ? `<div class="history-item" onclick="document.querySelectorAll('.msg')[${i}]?.scrollIntoView({behavior:'smooth',block:'center'})">👤 <span class="q">${trunc(stripHtml(m.content).replace(/\n/g,' '), 36)}</span></div>`
     : '').join('');
 }
 
@@ -490,18 +490,25 @@ function addAssistantMessage(data, mode, mid, latency) {
   } else {
     const answer = data.answer || '*无回答*';
     const refs = data.references || [];
-    let html = answer;
+    // Render answer markdown
+    let bubbleHtml = marked(answer);
+    // Append references as raw HTML (outside marked's <p> scope)
     if (refs.length) {
-      html += '<details class="references" open><summary>📎 引用来源 (' + refs.length + ') · ' + latency + 'ms</summary>';
+      bubbleHtml += '<details class="references" open><summary>📎 引用来源 (' + refs.length + ') · ' + latency + 'ms</summary>';
       refs.forEach(r => {
         const pct = (r.score * 100).toFixed(1);
-        html += '<div class="ref-item" onclick="showRef(' + esc(JSON.stringify(r)) + ')"><span class="score" style="color:' + (pct>70?'#22c55e':pct>40?'#f59e0b':'#64748b') + '">' + pct + '%</span><span class="path">' + esc(r.filepath) + '</span><span class="heading">' + esc(r.heading) + '</span><span class="preview">' + trunc(String(r.content||''),80) + '</span></div>';
+        bubbleHtml += '<div class="ref-item">'
+          + '<span class="score" style="color:' + (pct>70?'#22c55e':pct>40?'#f59e0b':'#64748b') + '">' + pct + '%</span>'
+          + '<span class="path">' + esc(r.filepath) + '</span>'
+          + '<span class="heading">' + esc(r.heading) + '</span>'
+          + '<span class="preview">' + trunc(String(r.content||''),80) + '</span>'
+          + '</div>';
       });
-      html += '</details>';
+      bubbleHtml += '</details>';
     }
     const div = document.createElement('div');
     div.className = 'msg assistant'; div.id = mid;
-    div.innerHTML = '<div class="bubble"><div class="msg-actions"><button onclick="copyMsg(\'' + mid + '\')" title="复制">📋</button><button onclick="viewRaw()" title="JSON">🔍</button></div>' + marked(html) + '</div>';
+    div.innerHTML = '<div class="bubble"><div class="msg-actions"><button onclick="copyMsg(\'' + mid + '\')" title="复制">📋</button><button onclick="viewRaw()" title="JSON">🔍</button></div>' + bubbleHtml + '</div>';
     document.getElementById('chat').appendChild(div);
     document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
   }
