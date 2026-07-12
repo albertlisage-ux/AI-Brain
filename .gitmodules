@@ -1,0 +1,3 @@
+[submodule "02 Projects/LinkTech-hydraulic/code"]
+	path = 02 Projects/LinkTech-hydraulic/code
+	url = git@github.com:albertlisage-ux/LinkTech-hydraulic.git
