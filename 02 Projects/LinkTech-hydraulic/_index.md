@@ -2,6 +2,27 @@
 
 > 源自 `~/.codex/worktrees/102d/LinkTech-hydraulic/.roo/skills/linktec/`
 > 导入日期：2026-07-12
+> **AI-Brain 远程**: `git@github.com:albertlisage-ux/AI-Brain.git`
+
+## Git 关系
+
+```mermaid
+graph LR
+    AB[AI-Brain 仓库] -->|git submodule| LH[LinkTech-hydraulic/code/]
+    LH -->|指向| REMOTE[git@github.com:albertlisage-ux/LinkTech-hydraulic.git]
+    
+    subgraph "本目录（笔记）"
+        INDEX[_index.md]
+        SKILL[03 Skills/ 引用]
+        ARCH[05 Architecture/ 引用]
+        DECI[06 Decisions/ 引用]
+        LESS[07 Lessons/ 引用]
+    end
+    
+    INDEX -.->|笔记| LH
+    SKILL -.->|记录 Skill| LH
+    ARCH -.->|记录架构| LH
+```
 
 ## 项目身份
 
@@ -46,17 +67,20 @@
 
 ```bash
 # 克隆 AI-Brain 后初始化子模块
+git clone git@github.com:albertlisage-ux/AI-Brain.git
+cd AI-Brain
 git submodule update --init --recursive
 
 # 或克隆时同时拉取子模块
-git clone --recursive <ai-brain-repo-url>
+git clone --recursive git@github.com:albertlisage-ux/AI-Brain.git
 ```
 
 | 信息 | 值 |
 |------|-----|
+| AI-Brain 远程 | `git@github.com:albertlisage-ux/AI-Brain.git` |
 | 子模块路径 | `code/` |
-| 远程仓库 | `git@github.com:albertlisage-ux/LinkTech-hydraulic.git` |
-| 本地固定版本 | `code/` 目录下的 `.git` 指针 |
+| 子模块远程 | `git@github.com:albertlisage-ux/LinkTech-hydraulic.git` |
+| 关系 | AI-Brain 父仓库 → Submodule `code/` → LinkTech-hydraulic 代码 |
 
 > 📌 笔记文件（`_index.md` 等）在 AI-Brain 仓库中管理，`code/` 子模块指向实际项目代码的特定 commit。
 
