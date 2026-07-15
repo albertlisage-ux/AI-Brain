@@ -519,20 +519,6 @@ async function reindex() {
   btn.disabled = false; btn.textContent = '🔄 触发重新索引';
 }
 
-function exportChat() {
-  const session = getCurrentSession();
-  if (!session || !session.messages.length) { showToast('当前对话没有消息'); return; }
-  let md = '# AI-Brain RAG 对话\n> ' + session.title + '\n> 导出: ' + new Date().toLocaleString() + '\n\n';
-  session.messages.forEach(m => {
-    md += '## ' + (m.role === 'user' ? '👤 你' : '🤖 AI') + '\n\n' + stripHtml(m.content) + '\n\n---\n\n';
-  });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([md], { type: 'text/markdown' }));
-  a.download = 'ai-brain-rag-' + new Date().toISOString().slice(0,10) + '.md';
-  a.click();
-  showToast('✅ 已导出');
-}
-
 function clearChat() {
   const session = getCurrentSession();
   if (!session || !session.messages.length) return;
@@ -752,55 +738,11 @@ function addSystemMessage(text) {
   chat.scrollTop = chat.scrollHeight;
   setTimeout(() => div.remove(), 4000);
 }
-      html += '<div class="search-result-card"><div class="header"><span class="idx">' + (i+1) + '</span><span class="score" style="color:' + (pct>70?'#22c55e':pct>40?'#f59e0b':'#64748b') + '">' + pct + '%</span><span class="filepath">' + esc(r.filepath) + '</span></div><div class="score-bar"><div class="fill" style="width:' + pct + '%"></div></div><div style="font-size:12px;color:#3b82f6;margin-bottom:4px">' + esc(r.heading) + '</div><div class="content-preview" id="p-' + mid + '-' + i + '">' + esc(r.content) + '</div><button class="toggle-preview" onclick="tp(\'p-' + mid + '-' + i + '\',this)">展开全文</button></div>';
-    });
-    if (!count) html += '<p style="color:#64748b;margin-top:8px">未找到相关结果。</p>';
-    const div = document.createElement('div');
-    div.className = 'msg assistant'; div.id = mid;
-    div.innerHTML = '<div class="bubble">' + html + '</div>';
-    document.getElementById('chat').appendChild(div);
-    document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
-  } else {
-    const answer = data.answer || '*无回答*';
-    const refs = data.references || [];
-    // Render answer markdown
-    let bubbleHtml = marked(answer);
-    // Append references as raw HTML (outside marked's <p> scope)
-    if (refs.length) {
-      bubbleHtml += '<details class="references" open><summary>📎 引用来源 (' + refs.length + ') · ' + latency + 'ms</summary>';
-      refs.forEach(r => {
-        const pct = (r.score * 100).toFixed(1);
-        bubbleHtml += '<div class="ref-item">'
-          + '<span class="score" style="color:' + (pct>70?'#22c55e':pct>40?'#f59e0b':'#64748b') + '">' + pct + '%</span>'
-          + '<span class="path">' + esc(r.filepath) + '</span>'
-          + '<span class="heading">' + esc(r.heading) + '</span>'
-          + '<span class="preview">' + trunc(String(r.content||''),80) + '</span>'
-          + '</div>';
-      });
-      bubbleHtml += '</details>';
-    }
-    const div = document.createElement('div');
-    div.className = 'msg assistant'; div.id = mid;
-    div.innerHTML = '<div class="bubble"><div class="msg-actions"><button onclick="copyMsg(\'' + mid + '\')" title="复制">📋</button><button onclick="viewRaw()" title="JSON">🔍</button></div>' + bubbleHtml + '</div>';
-    document.getElementById('chat').appendChild(div);
-    document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
-  }
-}
 
 function copyMsg(id) {
   const el = document.getElementById(id);
   if (!el) return;
   navigator.clipboard.writeText(el.textContent.replace(/[📋🔍]/g,'').trim()).then(() => showToast('✅ 已复制'));
-}
-
-function viewRaw() {
-  const last = chatHistory[chatHistory.length-1];
-  if (!last || !last.raw) { showToast('无原始数据'); return; }
-  const d = document.createElement('div');
-  d.className = 'json-modal'; d.id = 'jm';
-  d.innerHTML = '<div style="position:relative;width:90%;max-width:800px"><pre>' + esc(JSON.stringify(last.raw,null,2)) + '</pre><button class="close-btn" onclick="document.getElementById(\'jm\').remove()">关闭</button></div>';
-  d.onclick = e => { if (e.target === d) d.remove(); };
-  document.body.appendChild(d);
 }
 
 function showRef(jsonStr) {
