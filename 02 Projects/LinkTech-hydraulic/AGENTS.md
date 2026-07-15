@@ -23,7 +23,8 @@
 
 | Topic | File |
 |-------|------|
-| Project overview & skill entry | `linktec.md` |
+| Project overview | `linktech-project.md` |
+| Operational workflow | `../../03 Skills/linktech-workflow.md` |
 | Frontend taste rules | `../../03 Skills/linktec-frontend-taste.md` |
 | User & ticket system | `../../05 Architecture/linktech-user-system.md` |
 | Product system | `../../05 Architecture/linktech-product-system.md` |

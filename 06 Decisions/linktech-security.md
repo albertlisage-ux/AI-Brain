@@ -3,7 +3,7 @@ type: decision
 topics: [linktech, security]
 status: active
 project:
-  - "[[02 Projects/LinkTech-hydraulic/linktec|LinkTech]]"
+  - "[[02 Projects/LinkTech-hydraulic/linktech-project|LinkTech]]"
 ---
 
 # LinkTec 安全与凭证策略
@@ -104,4 +104,4 @@ $csrf_token = generateCSRFToken();
 
 ---
 
-**相关：** [[../02 Projects/LinkTech-hydraulic/linktec|← 项目主页]] · [[../05 Architecture/linktech-user-system|用户系统]] · [[../03 Skills/security-best-practices-skill|通用安全实践]]
+**相关：** [[../02 Projects/LinkTech-hydraulic/linktech-project|← 项目主页]] · [[../05 Architecture/linktech-user-system|用户系统]] · [[../03 Skills/security-best-practices-skill|通用安全实践]]

@@ -1,3 +1,9 @@
+---
+type: skill
+topics: [codex, automation]
+status: reference
+---
+
 # Playwright CLI Skill
 
 **来源**: `~/.codex/skills/playwright/`  
@@ -54,4 +60,4 @@ export PWCLI="$CODEX_HOME/skills/playwright/scripts/playwright_cli.sh"
 
 ---
 
-**相关：** [[03 Skills/codex|← 返回 Skills 索引]] · [[screenshot-skill|Screenshot]] · [[../05 Architecture/codex-system-architecture|系统架构]]
+**相关：** [[03 Skills/skills-moc|← 返回 Skills 索引]] · [[screenshot-skill|Screenshot]] · [[../05 Architecture/codex-system-architecture|系统架构]]

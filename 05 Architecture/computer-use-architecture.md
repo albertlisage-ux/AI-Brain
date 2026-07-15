@@ -1,3 +1,9 @@
+---
+type: architecture
+topics: [codex, automation]
+status: reference
+---
+
 # Computer Use 架构
 
 **来源**: `~/.codex/computer-use/`  

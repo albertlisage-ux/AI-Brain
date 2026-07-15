@@ -1,3 +1,11 @@
+---
+type: architecture
+topics: [linktech]
+status: active
+project:
+  - "[[02 Projects/LinkTech-hydraulic/linktech-project|LinkTech]]"
+---
+
 # LinkTec 产品系统架构
 
 **来源**: `~/.codex/worktrees/102d/LinkTech-hydraulic/.roo/skills/linktec/PRODUCT_SYSTEM.md`  
@@ -65,4 +73,4 @@
 
 ---
 
-**相关：** [[../02 Projects/LinkTech-hydraulic/linktec|← 项目主页]] · [[../03 Skills/linktec-frontend-taste|前端 Taste 规则]] · [[../03 Skills/linktec-skill|Skill 入口]]
+**相关：** [[../02 Projects/LinkTech-hydraulic/linktech-project|← 项目主页]] · [[../03 Skills/linktec-frontend-taste|前端 Taste 规则]] · [[../03 Skills/linktech-workflow|Skill 入口]]

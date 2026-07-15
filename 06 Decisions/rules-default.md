@@ -1,3 +1,9 @@
+---
+type: decision
+topics: [codex, security]
+status: reference
+---
+
 # Rules 默认规则
 
 **来源**: `~/.codex/rules/default.rules`  

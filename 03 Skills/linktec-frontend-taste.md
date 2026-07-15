@@ -1,3 +1,11 @@
+---
+type: skill
+topics: [linktech, design]
+status: active
+project:
+  - "[[02 Projects/LinkTech-hydraulic/linktech-project|LinkTech]]"
+---
+
 # LinkTec Frontend Taste Rules
 
 **来源**: `~/.codex/worktrees/102d/LinkTech-hydraulic/.roo/skills/linktec/FRONTEND_TASTE.md`  
@@ -65,4 +73,4 @@ leaning toward clear product inspection, trustworthy navigation, and low-motion 
 
 ---
 
-**相关：** [[linktec-skill|← Skill 入口]] · [[../02 Projects/LinkTech-hydraulic/linktec|项目主页]] · [[03 Skills/taste-skill|通用 Taste Skill]]
+**相关：** [[linktech-workflow|← 工作流入口]] · [[../02 Projects/LinkTech-hydraulic/linktech-project|项目主页]] · [[03 Skills/taste-skill|通用 Taste Skill]]

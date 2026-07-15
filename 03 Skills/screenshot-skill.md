@@ -1,3 +1,9 @@
+---
+type: skill
+topics: [codex, automation]
+status: reference
+---
+
 # Screenshot Capture Skill
 
 **来源**: `~/.codex/skills/screenshot/`  
@@ -39,5 +45,5 @@ python3 <skill-path>/scripts/take_screenshot.py --app "<App>"
 
 ---
 
-**相关：** [[03 Skills/codex|← 返回 Skills 索引]] · [[playwright-skill|Playwright]] · [[system-imagegen-skill|ImageGen]]
+**相关：** [[03 Skills/skills-moc|← 返回 Skills 索引]] · [[playwright-skill|Playwright]] · [[system-imagegen-skill|ImageGen]]
 | 列出匹配窗口 | `python3 <path>/take_screenshot.py --list-windows --app "Codex"` |

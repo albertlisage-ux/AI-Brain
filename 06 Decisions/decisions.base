@@ -1,6 +1,7 @@
 filters:
   and:
     - 'type == "decision"'
+    - 'file.folder != "08 Templates"'
 properties:
   file.name:
     displayName: Decision

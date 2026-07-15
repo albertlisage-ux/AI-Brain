@@ -1,3 +1,9 @@
+---
+type: skill
+topics: [design, codex]
+status: reference
+---
+
 # Taste Skill (Anti-Slop Frontend Skill)
 
 **来源**: `~/.codex/skills/taste-skill/`  
@@ -43,4 +49,4 @@
 
 ---
 
-**相关：** [[03 Skills/codex|← 返回 Skills 索引]] · [[ui-ux-pro-max-skill|UI/UX Pro Max]] · [[../06 Decisions/taste-skill-design-philosophy|设计理念详解]]
+**相关：** [[03 Skills/skills-moc|← 返回 Skills 索引]] · [[ui-ux-pro-max-skill|UI/UX Pro Max]] · [[../06 Decisions/taste-skill-design-philosophy|设计理念详解]]

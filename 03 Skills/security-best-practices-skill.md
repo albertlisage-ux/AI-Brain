@@ -1,3 +1,9 @@
+---
+type: skill
+topics: [security, codex]
+status: reference
+---
+
 # Security Best Practices Skill
 
 **来源**: `~/.codex/skills/security-best-practices/`  
@@ -40,4 +46,4 @@
 
 ---
 
-**相关：** [[03 Skills/codex|← 返回 Skills 索引]] · [[security-ownership-map-skill|Security Ownership Map]] · [[security-threat-model-skill|Security Threat Model]] · [[../06 Decisions/security-tools-decision-log|安全工具决策]]
+**相关：** [[03 Skills/skills-moc|← 返回 Skills 索引]] · [[security-ownership-map-skill|Security Ownership Map]] · [[security-threat-model-skill|Security Threat Model]] · [[../06 Decisions/security-tools-decision-log|安全工具决策]]

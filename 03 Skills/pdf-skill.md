@@ -1,3 +1,9 @@
+---
+type: skill
+topics: [codex, documents]
+status: reference
+---
+
 # PDF Skill
 
 **来源**: `~/.codex/skills/pdf/`  
@@ -34,4 +40,4 @@
 
 ---
 
-**相关：** [[03 Skills/codex|← 返回 Skills 索引]] · [[../05 Architecture/codex-system-architecture|系统架构]] · [[system-imagegen-skill|ImageGen]]
+**相关：** [[03 Skills/skills-moc|← 返回 Skills 索引]] · [[../05 Architecture/codex-system-architecture|系统架构]] · [[system-imagegen-skill|ImageGen]]

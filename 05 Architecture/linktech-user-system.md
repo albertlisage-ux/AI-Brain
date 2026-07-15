@@ -3,7 +3,7 @@ type: architecture
 topics: [linktech, security]
 status: active
 project:
-  - "[[02 Projects/LinkTech-hydraulic/linktec|LinkTech]]"
+  - "[[02 Projects/LinkTech-hydraulic/linktech-project|LinkTech]]"
 ---
 
 # LinkTec 用户系统与管理员 — 技术文档
@@ -100,4 +100,4 @@ register_proc.php
 
 ---
 
-**相关：** [[../02 Projects/LinkTech-hydraulic/linktec|← 项目主页]] · [[linktech-deployment|部署运维]] · [[../06 Decisions/linktech-security|安全策略]] · [[../07 Lessons/linktech-troubleshooting|故障排查]]
+**相关：** [[../02 Projects/LinkTech-hydraulic/linktech-project|← 项目主页]] · [[linktech-deployment|部署运维]] · [[../06 Decisions/linktech-security|安全策略]] · [[../07 Lessons/linktech-troubleshooting|故障排查]]

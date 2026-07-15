@@ -2,6 +2,7 @@
 type: moc
 topics: [skills]
 status: active
+aliases: [Skills, Skills MOC]
 ---
 
 # Skills MOC
@@ -53,11 +54,11 @@ AI RAG 的实现经验记录在 [[07 Lessons/rag-playground-dev-log|Playground �
 
 ## 项目专用
 
-[[03 Skills/linktec-skill|LinkTech Skill]] 将项目规则映射到 [[02 Projects/LinkTech-hydraulic/linktec|项目主页]]、实现架构、安全决策和排障经验。
+[[03 Skills/linktech-workflow|LinkTech Skill]] 将项目规则映射到 [[02 Projects/LinkTech-hydraulic/linktech-project|项目主页]]、实现架构、安全决策和排障经验。
 
 ## 继续探索
 
-- [[../codex|返回 AI-Brain 总入口]]
-- [[05 Architecture/codex|按系统查看架构]]
-- [[06 Decisions/codex|按作用范围查看决策]]
-- [[07 Lessons/codex|按来源查看经验]]
+- [[../AI-Brain|返回 AI-Brain 总入口]]
+- [[05 Architecture/architecture-moc|按系统查看架构]]
+- [[06 Decisions/decisions-moc|按作用范围查看决策]]
+- [[07 Lessons/lessons-moc|按来源查看经验]]

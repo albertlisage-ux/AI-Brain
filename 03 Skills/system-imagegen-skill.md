@@ -1,3 +1,9 @@
+---
+type: skill
+topics: [codex, media]
+status: reference
+---
+
 # System: Image Generation Skill
 
 **来源**: `~/.codex/skills/.system/imagegen/`  
@@ -46,4 +52,4 @@
 
 ---
 
-**相关：** [[03 Skills/codex|← 返回 Skills 索引]] · [[screenshot-skill|Screenshot]] · [[pdf-skill|PDF]] · [[system-openai-docs-skill|OpenAI Docs]]
+**相关：** [[03 Skills/skills-moc|← 返回 Skills 索引]] · [[screenshot-skill|Screenshot]] · [[pdf-skill|PDF]] · [[system-openai-docs-skill|OpenAI Docs]]

@@ -2,35 +2,15 @@
 type: skill
 topics: [linktech]
 status: active
+aliases: [LinkTech Workflow, LinkTech Skill]
 project:
-  - "[[02 Projects/LinkTech-hydraulic/linktec|LinkTech]]"
+  - "[[02 Projects/LinkTech-hydraulic/linktech-project|LinkTech]]"
 ---
 
-# HydraTec/LinkTec Skill
+# LinkTech 工作流
 
 **来源**: `~/.codex/worktrees/102d/LinkTech-hydraulic/.roo/skills/linktec/SKILL.md`  
-**用途**: 工业液压门户项目指南 — PHP LAMP 站点、产品页面生成器、客户用户系统、管理工单系统
-
-## 项目身份
-
-- **品牌**: HydraTec / LinkTec
-- **生产域名**: `https://www.eurohydraulicparts.com/`
-- **技术栈**: PHP 7.4+, MySQL/MariaDB, Apache/LAMP, Tailwind CSS via CDN, Vanilla JS
-- **前端库**: Swiper.js, Chart.js, Font Awesome
-
-## 仓库映射
-
-| 路径 | 用途 |
-|------|------|
-| `hydraulich/` | 主站、产品系统、支持页、生成器、资源、语言文件 |
-| `hydraulich/products/` | 产品源文件夹树 |
-| `hydraulich/productsPages/` | 分类页和生成的产品页 |
-| `hydraulich/templates/` | 产品/分类生成模板 |
-| `hydraulich/docus/` | 详细技术文档和报告 |
-| `users/` | 客户登录、注册、仪表盘、个人资料、工单视图 |
-| `adminmanager/` | 管理员登录、工单管理、仪表盘、诊断、用户管理 |
-| `config/` | 共享数据库、邮件、安全、管理、语言配置 |
-| `phpmyadmin/` | 轻量数据库管理工具 |
+**用途**: 开始 LinkTech 开发任务前的操作规则、命令与文档路由。项目身份和仓库结构以 [[02 Projects/LinkTech-hydraulic/linktech-project|项目主页]] 为准。
 
 ## 当前规则
 
@@ -49,7 +29,7 @@ php hydraulich/generate_product_pages.php --status
 php hydraulich/generate_product_pages.php --force
 ```
 
-## 参考文档映射
+## 按任务查阅
 
 | 需要 | 读取 |
 |------|------|
@@ -63,4 +43,4 @@ php hydraulich/generate_product_pages.php --force
 
 ---
 
-**相关：** [[../02 Projects/LinkTech-hydraulic/linktec|← 项目主页]] · [[../03 Skills/codex|Skills 索引]] · [[linktec-frontend-taste|前端 Taste 规则]]
+**相关：** [[../02 Projects/LinkTech-hydraulic/linktech-project|← 项目主页]] · [[../03 Skills/skills-moc|Skills 索引]] · [[linktec-frontend-taste|前端 Taste 规则]]

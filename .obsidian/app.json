@@ -10,6 +10,9 @@
     "ai-brain-rag/data/qdrant/",
     "ai-brain-rag/indexer/__pycache__/",
     "docs/superpowers/",
+    "01 Daily/",
+    "08 Templates/",
+    "99 Archive/",
     "README.md",
     "AGENTS.md"
   ]

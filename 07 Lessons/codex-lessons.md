@@ -8,7 +8,7 @@ status: reference
 
 > 2026-07-12 初始导入
 
-**交叉引用：** [[../05 Architecture/codex-system-architecture|系统架构]] · [[../06 Decisions/codex-config-decisions|配置决策]] · [[../00 Inbox/codex-import-2026-07-12|导入记录]]
+**交叉引用：** [[../05 Architecture/codex-system-architecture|系统架构]] · [[../06 Decisions/codex-config-decisions|配置决策]] · [[../99 Archive/codex-import-2026-07-12|初始导入记录]]
 
 ## 已知注意事项
 

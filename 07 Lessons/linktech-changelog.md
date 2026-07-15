@@ -1,3 +1,11 @@
+---
+type: lesson
+topics: [linktech]
+status: reference
+project:
+  - "[[02 Projects/LinkTech-hydraulic/linktech-project|LinkTech]]"
+---
+
 # LinkTec 变更日志
 
 **来源**: `~/.codex/worktrees/102d/LinkTech-hydraulic/.roo/skills/linktec/CHANGELOG.md`  
@@ -79,4 +87,4 @@
 
 ---
 
-**相关：** [[../02 Projects/LinkTech-hydraulic/linktec|← 项目主页]] · [[linktech-troubleshooting|故障排查手册]] · [[../06 Decisions/linktech-security|安全策略]]
+**相关：** [[../02 Projects/LinkTech-hydraulic/linktech-project|← 项目主页]] · [[linktech-troubleshooting|故障排查手册]] · [[../06 Decisions/linktech-security|安全策略]]

@@ -2,6 +2,7 @@
 type: project
 topics: [linktech, hydraulic]
 status: active
+aliases: [LinkTech, HydraTec]
 ---
 
 # LinkTech-hydraulic 项目
@@ -18,7 +19,7 @@ graph LR
     LH -->|指向| REMOTE[git@github.com:albertlisage-ux/LinkTech-hydraulic.git]
     
     subgraph "本目录（笔记）"
-        INDEX[linktec.md]
+        INDEX[linktech-project.md]
         SKILL[03 Skills/ 引用]
         ARCH[05 Architecture/ 引用]
     end
@@ -56,7 +57,7 @@ graph LR
 
 | 分类 | 文件 | 说明 |
 |------|------|------|
-| 📋 项目能力 | [[03 Skills/linktec-skill\|Skill 入口]] | 执行项目前应遵循的仓库映射、规则和命令 |
+| 📋 项目能力 | [[03 Skills/linktech-workflow\|Skill 入口]] | 执行项目前应遵循的仓库映射、规则和命令 |
 | 🔐 用户系统 | [[../../05 Architecture/linktech-user-system\|用户与工单系统]] | 认证流、注册流、工单 API 详细技术文档 |
 | 🏗 产品系统 | [[../../05 Architecture/linktech-product-system\|产品系统架构]] | 导航、卡片、模板、品牌 UI 规则 |
 | 🎨 前端设计 | [[../../03 Skills/linktec-frontend-taste\|前端 Taste 规则]] | 工业门户前端品质检查 |
@@ -86,23 +87,11 @@ git clone --recursive git@github.com:albertlisage-ux/AI-Brain.git
 | 子模块远程 | `git@github.com:albertlisage-ux/LinkTech-hydraulic.git` |
 | 关系 | AI-Brain 父仓库 → Submodule `code/` → LinkTech-hydraulic 代码 |
 
-> 📌 笔记文件（`linktec.md` 等）在 AI-Brain 仓库中管理，`code/` 子模块指向实际项目代码的特定 commit。
+> 📌 项目知识在 AI-Brain 仓库中管理，`code/` 子模块指向实际项目代码的特定 commit。
 
 ## 跨项目知识
 
-- [[../../codex|返回 AI-Brain 总入口]] — 切换到其他主题或知识类型。
-- [[03 Skills/codex|Skills MOC]] — 查找可复用到其他项目的工作流。
+- [[../../AI-Brain|返回 AI-Brain 总入口]] — 切换到其他主题或知识类型。
+- [[03 Skills/skills-moc|Skills MOC]] — 查找可复用到其他项目的工作流。
 - [[05 Architecture/codex-system-architecture|Codex 系统架构]] — 理解项目使用的 Codex 工具环境。
 - [[06 Decisions/codex-config-decisions|Codex 配置决策]] — 追溯工具环境的配置取舍。
-
-## 常用命令
-
-```bash
-# PHP 语法检查
-php -l path/to/file.php
-
-# 产品页面生成
-php hydraulich/generate_product_pages.php --dry-run
-php hydraulich/generate_product_pages.php --status
-php hydraulich/generate_product_pages.php --force
-```

@@ -1,3 +1,9 @@
+---
+type: decision
+topics: [design, codex]
+status: reference
+---
+
 # Taste Skill 设计理念
 
 > 2026-07-12 导入

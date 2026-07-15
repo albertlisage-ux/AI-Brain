@@ -2,6 +2,7 @@
 type: moc
 topics: [lessons]
 status: active
+aliases: [Lessons, Lessons MOC]
 ---
 
 # Lessons MOC
@@ -19,7 +20,7 @@ status: active
 - [[07 Lessons/linktech-changelog|变更日志]] — 回顾项目版本演进和改版范围。
 - [[07 Lessons/linktech-troubleshooting|故障排查]] — 按症状定位用户系统、生成器和部署问题。
 
-这些经验来源于 [[02 Projects/LinkTech-hydraulic/linktec|LinkTech 项目]]，并回馈 [[05 Architecture/codex|架构说明]] 与 [[06 Decisions/linktech-security|安全策略]]。
+这些经验来源于 [[02 Projects/LinkTech-hydraulic/linktech-project|LinkTech 项目]]，并回馈 [[05 Architecture/architecture-moc|架构说明]] 与 [[06 Decisions/linktech-security|安全策略]]。
 
 ## AI RAG
 
@@ -29,7 +30,7 @@ status: active
 
 ## 继续探索
 
-- [[../codex|返回 AI-Brain 总入口]]
-- [[03 Skills/codex|查看可复用能力]]
-- [[05 Architecture/codex|查看经验涉及的系统]]
-- [[06 Decisions/codex|查看经验形成的决策]]
+- [[../AI-Brain|返回 AI-Brain 总入口]]
+- [[03 Skills/skills-moc|查看可复用能力]]
+- [[05 Architecture/architecture-moc|查看经验涉及的系统]]
+- [[06 Decisions/decisions-moc|查看经验形成的决策]]

@@ -8,7 +8,7 @@ status: reference
 
 > 源自 `~/.codex/` 配置分析，2026-07-12
 
-**交叉引用：** [[../06 Decisions/codex-config-decisions|配置决策]] · [[../03 Skills/codex|Skills 索引]] · [[computer-use-architecture|Computer Use 架构]] · [[../06 Decisions/rules-default|默认规则]]
+**交叉引用：** [[../06 Decisions/codex-config-decisions|配置决策]] · [[../03 Skills/skills-moc|Skills 索引]] · [[computer-use-architecture|Computer Use 架构]] · [[../06 Decisions/rules-default|默认规则]]
 
 ## 目录结构
 

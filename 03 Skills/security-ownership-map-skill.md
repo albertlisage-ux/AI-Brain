@@ -1,3 +1,9 @@
+---
+type: skill
+topics: [security, codex]
+status: reference
+---
+
 # Security Ownership Map Skill
 
 **来源**: `~/.codex/skills/security-ownership-map/`  
@@ -60,4 +66,4 @@ python scripts/run_ownership_map.py \
 
 ---
 
-**相关：** [[03 Skills/codex|← 返回 Skills 索引]] · [[security-best-practices-skill|Security Best Practices]] · [[security-threat-model-skill|Security Threat Model]] · [[../06 Decisions/security-tools-decision-log|安全工具决策]]
+**相关：** [[03 Skills/skills-moc|← 返回 Skills 索引]] · [[security-best-practices-skill|Security Best Practices]] · [[security-threat-model-skill|Security Threat Model]] · [[../06 Decisions/security-tools-decision-log|安全工具决策]]

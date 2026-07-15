@@ -1,3 +1,9 @@
+---
+type: skill
+topics: [design, codex]
+status: reference
+---
+
 # UI/UX Pro Max - Design Intelligence
 
 **来源**: `~/.codex/skills/ui-ux-pro-max/`  
@@ -55,4 +61,4 @@
 
 ---
 
-**相关：** [[03 Skills/codex|← 返回 Skills 索引]] · [[taste-skill|Taste Skill]] · [[../06 Decisions/taste-skill-design-philosophy|Taste Skill 设计理念]]
+**相关：** [[03 Skills/skills-moc|← 返回 Skills 索引]] · [[taste-skill|Taste Skill]] · [[../06 Decisions/taste-skill-design-philosophy|Taste Skill 设计理念]]

@@ -1,6 +1,7 @@
 filters:
   and:
     - 'type == "skill"'
+    - 'file.folder != "08 Templates"'
 properties:
   file.name:
     displayName: Skill

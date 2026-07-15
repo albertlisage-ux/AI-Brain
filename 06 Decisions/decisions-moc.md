@@ -2,6 +2,7 @@
 type: moc
 topics: [decisions]
 status: active
+aliases: [Decisions, Decisions MOC]
 ---
 
 # Decisions MOC
@@ -30,7 +31,7 @@ LinkTech 安全策略直接作用于 [[05 Architecture/linktech-user-system|用�
 
 ## 继续探索
 
-- [[../codex|返回 AI-Brain 总入口]]
-- [[03 Skills/codex|查看执行决策的能力]]
-- [[05 Architecture/codex|查看决策约束的架构]]
-- [[07 Lessons/codex|查看决策产生的结果]]
+- [[../AI-Brain|返回 AI-Brain 总入口]]
+- [[03 Skills/skills-moc|查看执行决策的能力]]
+- [[05 Architecture/architecture-moc|查看决策约束的架构]]
+- [[07 Lessons/lessons-moc|查看决策产生的结果]]

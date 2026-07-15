@@ -1,7 +1,15 @@
+---
+type: archive
+topics: [codex, ai-brain]
+status: archived
+aliases: [Codex 初始导入记录]
+---
+
 # Codex 配置导入记录
 
 > 导入时间：2026-07-12
 > 来源：`~/.codex/`
+> 时间线摘要：[[01 Daily/2026-07-12|2026-07-12 会话记录]]
 
 ## 导入内容清单
 

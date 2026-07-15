@@ -1,3 +1,9 @@
+---
+type: decision
+topics: [security, codex]
+status: reference
+---
+
 # 安全工具决策记录
 
 > 2026-07-12 导入

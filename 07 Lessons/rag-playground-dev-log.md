@@ -3,7 +3,7 @@ type: lesson
 topics: [ai-rag]
 status: active
 project:
-  - "[[../codex|AI-Brain]]"
+  - "[[../AI-Brain|AI-Brain]]"
 ---
 
 # RAG Playground 开发日志

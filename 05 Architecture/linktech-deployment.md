@@ -1,3 +1,11 @@
+---
+type: architecture
+topics: [linktech, operations]
+status: active
+project:
+  - "[[02 Projects/LinkTech-hydraulic/linktech-project|LinkTech]]"
+---
+
 # LinkTec 部署与运维
 
 **来源**: `~/.codex/worktrees/102d/LinkTech-hydraulic/.roo/skills/linktec/DEPLOYMENT.md`  
@@ -94,4 +102,4 @@ git push → GitHub push webhook
 
 ---
 
-**相关：** [[../02 Projects/LinkTech-hydraulic/linktec|← 项目主页]] · [[../05 Architecture/linktech-user-system|用户系统]] · [[../07 Lessons/linktech-troubleshooting|故障排查]]
+**相关：** [[../02 Projects/LinkTech-hydraulic/linktech-project|← 项目主页]] · [[../05 Architecture/linktech-user-system|用户系统]] · [[../07 Lessons/linktech-troubleshooting|故障排查]]

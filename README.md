@@ -22,7 +22,7 @@ AI-Brain/
 ├── 01 Daily/        ← 每日记录
 ├── 02 Projects/     ← 项目笔记 + Git Submodule
 │   └── LinkTech-hydraulic/
-│       ├── linktec.md    ← 项目笔记（本仓库管理）
+│       ├── linktech-project.md ← 项目入口（本仓库管理）
 │       └── code/         ← Git Submodule（实际代码仓库）
 ├── 03 Skills/       ← 可复用技能/工作流知识
 ├── 04 Prompts/      ← 提示词库
@@ -32,7 +32,7 @@ AI-Brain/
 ├── 08 Templates/    ← 模板
 ├── 99 Archive/      ← 归档
 ├── Attachments/     ← 附件文件
-├── codex.md         ← Obsidian 图谱入口
+├── AI-Brain.md      ← Obsidian 知识总入口
 └── README.md        ← 本文件
 ```
 
@@ -52,7 +52,7 @@ AI-Brain/
 ```
 AI-Brain（父仓库）
   ├── 02 Projects/Project-A/
-  │   ├── linktec.md       ← 项目笔记（markdown，在 AI-Brain 中管理）
+  │   ├── linktech-project.md ← 项目笔记（Markdown，在 AI-Brain 中管理）
   │   └── code/            ← Git Submodule → 实际代码仓库
   └── 02 Projects/Project-B/
       └── ...
@@ -69,7 +69,9 @@ AI-Brain（父仓库）
 - `[[WikiLinks]]` — 笔记间双向链接
 - `Cmd+O` — 快速跳转
 - `Cmd+Shift+G` — 图谱视图查看知识网络
-- 标签、嵌入、反向链接面板等全部 Obsidian 功能
+- Properties 与 Bases — 按主题、类型和状态筛选知识
+- Backlinks、Outgoing Links 与局部图谱 — 沿真实关系探索笔记
+- 从 AI-Brain.md 进入总 MOC，再进入分类 MOC 或项目主页
 
 ## 许可
 

@@ -1,3 +1,9 @@
+---
+type: skill
+topics: [codex, plugins]
+status: reference
+---
+
 # System: Plugin Creator Skill
 
 **来源**: `~/.codex/skills/.system/plugin-creator/`  
@@ -56,4 +62,4 @@ python3 scripts/update_plugin_cachebuster.py <plugin-path>
 
 ---
 
-**相关：** [[03 Skills/codex|← 返回 Skills 索引]] · [[system-skill-creator-skill|Skill Creator]] · [[system-skill-installer-skill|Skill Installer]] · [[system-openai-docs-skill|OpenAI Docs]]
+**相关：** [[03 Skills/skills-moc|← 返回 Skills 索引]] · [[system-skill-creator-skill|Skill Creator]] · [[system-skill-installer-skill|Skill Installer]] · [[system-openai-docs-skill|OpenAI Docs]]

@@ -1,3 +1,9 @@
+---
+type: skill
+topics: [codex, skills]
+status: reference
+---
+
 # System: Skill Creator Skill
 
 **来源**: `~/.codex/skills/.system/skill-creator/`  
@@ -52,4 +58,4 @@ skill-name/
 
 ---
 
-**相关：** [[03 Skills/codex|← 返回 Skills 索引]] · [[system-skill-installer-skill|Skill Installer]] · [[system-plugin-creator-skill|Plugin Creator]] · [[../08 Templates/skill-analysis-template|Skill 导入模板]]
+**相关：** [[03 Skills/skills-moc|← 返回 Skills 索引]] · [[system-skill-installer-skill|Skill Installer]] · [[system-plugin-creator-skill|Plugin Creator]] · [[../08 Templates/skill-analysis-template|Skill 导入模板]]

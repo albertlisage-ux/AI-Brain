@@ -1,3 +1,9 @@
+---
+type: skill
+topics: [codex, openai]
+status: reference
+---
+
 # System: OpenAI Docs Skill
 
 **来源**: `~/.codex/skills/.system/openai-docs/`  
@@ -40,4 +46,4 @@
 
 ---
 
-**相关：** [[03 Skills/codex|← 返回 Skills 索引]] · [[system-skill-creator-skill|Skill Creator]] · [[system-plugin-creator-skill|Plugin Creator]] · [[../05 Architecture/codex-system-architecture|系统架构]]
+**相关：** [[03 Skills/skills-moc|← 返回 Skills 索引]] · [[system-skill-creator-skill|Skill Creator]] · [[system-plugin-creator-skill|Plugin Creator]] · [[../05 Architecture/codex-system-architecture|系统架构]]

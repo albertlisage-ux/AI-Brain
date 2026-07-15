@@ -3,7 +3,7 @@ type: lesson
 topics: [linktech, troubleshooting]
 status: active
 project:
-  - "[[02 Projects/LinkTech-hydraulic/linktec|LinkTech]]"
+  - "[[02 Projects/LinkTech-hydraulic/linktech-project|LinkTech]]"
 ---
 
 # LinkTec 故障排查手册
@@ -91,4 +91,4 @@ php hydraulich/generate_product_pages.php --status
 
 ---
 
-**相关：** [[../02 Projects/LinkTech-hydraulic/linktec|← 项目主页]] · [[linktech-changelog|变更日志]] · [[../05 Architecture/linktech-user-system|用户系统]] · [[../05 Architecture/linktech-deployment|部署运维]]
+**相关：** [[../02 Projects/LinkTech-hydraulic/linktech-project|← 项目主页]] · [[linktech-changelog|变更日志]] · [[../05 Architecture/linktech-user-system|用户系统]] · [[../05 Architecture/linktech-deployment|部署运维]]

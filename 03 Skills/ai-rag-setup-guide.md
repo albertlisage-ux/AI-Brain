@@ -3,7 +3,7 @@ type: skill
 topics: [ai-rag, codex]
 status: active
 project:
-  - "[[../codex|AI-Brain]]"
+  - "[[../AI-Brain|AI-Brain]]"
 ---
 
 # AI RAG 系统配置指南
