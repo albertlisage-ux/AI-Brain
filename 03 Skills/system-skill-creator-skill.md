@@ -52,4 +52,4 @@ skill-name/
 
 ---
 
-**相关：** [[codex|← 返回 Skills 索引]] · [[system-skill-installer-skill|Skill Installer]] · [[system-plugin-creator-skill|Plugin Creator]] · [[../08 Templates/skill-analysis-template|Skill 导入模板]]
+**相关：** [[03 Skills/codex|← 返回 Skills 索引]] · [[system-skill-installer-skill|Skill Installer]] · [[system-plugin-creator-skill|Plugin Creator]] · [[../08 Templates/skill-analysis-template|Skill 导入模板]]

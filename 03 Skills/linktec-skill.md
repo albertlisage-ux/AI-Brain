@@ -45,13 +45,13 @@ php hydraulich/generate_product_pages.php --force
 
 | 需要 | 读取 |
 |------|------|
-| 版本历史和近期变更 | [[../../07 Lessons/linktech-changelog\|CHANGELOG]] |
-| 产品导航、卡片、模板、搜索、品牌 UI | [[../../05 Architecture/linktech-product-system\|PRODUCT_SYSTEM]] |
+| 版本历史和近期变更 | [[../07 Lessons/linktech-changelog\|CHANGELOG]] |
+| 产品导航、卡片、模板、搜索、品牌 UI | [[../05 Architecture/linktech-product-system\|PRODUCT_SYSTEM]] |
 | 前端视觉质量、反通用 UI 检查 | [[linktec-frontend-taste\|FRONTEND_TASTE]] |
-| 部署、Webhook、产品生成操作 | [[../../05 Architecture/linktech-deployment\|DEPLOYMENT]] |
-| 已知错误和修复 | [[../../07 Lessons/linktech-troubleshooting\|TROUBLESHOOTING]] |
-| 安全策略、凭证、认证风险 | [[../../06 Decisions/linktech-security\|SECURITY]] |
-| 用户/管理员/工单内部细节 | [[../../05 Architecture/linktech-user-system\|SKILLUSER]] |
+| 部署、Webhook、产品生成操作 | [[../05 Architecture/linktech-deployment\|DEPLOYMENT]] |
+| 已知错误和修复 | [[../07 Lessons/linktech-troubleshooting\|TROUBLESHOOTING]] |
+| 安全策略、凭证、认证风险 | [[../06 Decisions/linktech-security\|SECURITY]] |
+| 用户/管理员/工单内部细节 | [[../05 Architecture/linktech-user-system\|SKILLUSER]] |
 
 ---
 

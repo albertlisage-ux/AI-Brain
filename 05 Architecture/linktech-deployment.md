@@ -94,4 +94,4 @@ git push → GitHub push webhook
 
 ---
 
-**相关：** [[../../02 Projects/LinkTech-hydraulic/linktec|← 项目主页]] · [[../../05 Architecture/linktech-user-system|用户系统]] · [[../../07 Lessons/linktech-troubleshooting|故障排查]]
+**相关：** [[../02 Projects/LinkTech-hydraulic/linktec|← 项目主页]] · [[../05 Architecture/linktech-user-system|用户系统]] · [[../07 Lessons/linktech-troubleshooting|故障排查]]

@@ -46,11 +46,11 @@ graph LR
 | `config/` | 共享数据库、邮件、安全、管理、语言配置 |
 | `phpmyadmin/` | 轻量数据库管理工具 |
 
-## 文档索引
+## 项目知识路径
 
 | 分类 | 文件 | 说明 |
 |------|------|------|
-| 📋 项目总览 | [[linktec-skill\|Skill 入口]] | 项目入口、仓库映射、通用命令 |
+| 📋 项目能力 | [[03 Skills/linktec-skill\|Skill 入口]] | 执行项目前应遵循的仓库映射、规则和命令 |
 | 🔐 用户系统 | [[../../05 Architecture/linktech-user-system\|用户与工单系统]] | 认证流、注册流、工单 API 详细技术文档 |
 | 🏗 产品系统 | [[../../05 Architecture/linktech-product-system\|产品系统架构]] | 导航、卡片、模板、品牌 UI 规则 |
 | 🎨 前端设计 | [[../../03 Skills/linktec-frontend-taste\|前端 Taste 规则]] | 工业门户前端品质检查 |
@@ -82,11 +82,12 @@ git clone --recursive git@github.com:albertlisage-ux/AI-Brain.git
 
 > 📌 笔记文件（`linktec.md` 等）在 AI-Brain 仓库中管理，`code/` 子模块指向实际项目代码的特定 commit。
 
-## 相关文件间交叉链接
+## 跨项目知识
 
-- [[../../03 Skills/codex|← 返回 Skills 总览]]
-- [[../../05 Architecture/codex-system-architecture|Codex 系统架构]]
-- [[../../06 Decisions/codex-config-decisions|Codex 配置决策]]
+- [[../../codex|返回 AI-Brain 总入口]] — 切换到其他主题或知识类型。
+- [[03 Skills/codex|Skills MOC]] — 查找可复用到其他项目的工作流。
+- [[05 Architecture/codex-system-architecture|Codex 系统架构]] — 理解项目使用的 Codex 工具环境。
+- [[06 Decisions/codex-config-decisions|Codex 配置决策]] — 追溯工具环境的配置取舍。
 
 ## 常用命令
 

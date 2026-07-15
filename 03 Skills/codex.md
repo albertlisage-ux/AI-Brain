@@ -1,64 +1,57 @@
-# Skills 索引
+# Skills MOC
 
-> 源自 Codex (`~/.codex/skills/`) 的技能体系，2026-07-12 导入
-> 🧠 [[ai-rag-setup-guide\|AI RAG 系统配置指南]] — 本地语义搜索 + DeepSeek 问答
+> 可复用能力与工作流入口。按任务选择 Skill，再沿链接进入其架构、决策或使用经验。
 
-## 用户安装的 Skills
+## Codex 平台能力
 
-| Skill | 用途 | 源路径 |
-|-------|------|--------|
-| [[pdf-skill\|PDF]] | PDF 读取、生成、渲染检查 | `.codex/skills/pdf/` |
-| [[playwright-skill\|Playwright]] | 浏览器自动化 CLI | `.codex/skills/playwright/` |
-| [[screenshot-skill\|Screenshot]] | 桌面/系统截图 | `.codex/skills/screenshot/` |
-| [[security-best-practices-skill\|Security Best Practices]] | 安全最佳实践审查 | `.codex/skills/security-best-practices/` |
-| [[security-ownership-map-skill\|Security Ownership Map]] | Git 安全所有权映射 | `.codex/skills/security-ownership-map/` |
-| [[security-threat-model-skill\|Security Threat Model]] | 威胁建模 | `.codex/skills/security-threat-model/` |
-| [[taste-skill\|Taste Skill]] | 前端设计品味（防模板化） | `.codex/skills/taste-skill/` |
-| [[ui-ux-pro-max-skill\|UI/UX Pro Max]] | UI/UX 设计智能库 | `.codex/skills/ui-ux-pro-max/` |
-| [[linktec-skill\|LinkTec Skill]] | HydraTec/LinkTec 工业液压门户项目指南 | `.roo/skills/linktec/SKILL.md` |
-| [[linktec-frontend-taste\|LinkTec Frontend Taste]] | B2B 工业门户前端设计品质指南 | `.roo/skills/linktec/FRONTEND_TASTE.md` |
-| [[ai-rag-setup-guide\|AI RAG Setup Guide]] | 本地 RAG 系统配置与使用指南 | `ai-brain-rag/` |
+| Skill | 解决的问题 |
+|---|---|
+| [[03 Skills/system-openai-docs-skill|OpenAI Docs]] | 查找官方 OpenAI 与 Codex 资料 |
+| [[03 Skills/system-skill-creator-skill|Skill Creator]] | 创建结构清晰、可验证的 Skill |
+| [[03 Skills/system-skill-installer-skill|Skill Installer]] | 安装和管理 Skill |
+| [[03 Skills/system-plugin-creator-skill|Plugin Creator]] | 创建 Codex 插件及 marketplace 元数据 |
 
-## 预装 System Skills
+理解这些能力如何装配，继续阅读 [[05 Architecture/codex-system-architecture|Codex 系统架构]]；理解配置取舍，进入 [[06 Decisions/codex-config-decisions|Codex 配置决策]]。
 
-| Skill | 用途 |
-|-------|------|
-| [[system-imagegen-skill\|ImageGen]] | 图像生成与编辑 |
-| [[system-openai-docs-skill\|OpenAI Docs]] | OpenAI 文档查询与 Codex 手册 |
-| [[system-plugin-creator-skill\|Plugin Creator]] | Codex 插件脚手架 |
-| [[system-skill-creator-skill\|Skill Creator]] | Skill 创建指南 |
-| [[system-skill-installer-skill\|Skill Installer]] | 安装 curated skills |
+## 内容与自动化
 
-## 技能树关系
+| Skill | 解决的问题 |
+|---|---|
+| [[03 Skills/pdf-skill|PDF]] | 读取、生成并渲染检查 PDF |
+| [[03 Skills/system-imagegen-skill|ImageGen]] | 生成或编辑位图 |
+| [[03 Skills/playwright-skill|Playwright]] | 自动化浏览器交互和页面验证 |
+| [[03 Skills/screenshot-skill|Screenshot]] | 捕获桌面或应用画面 |
+| [[03 Skills/ai-rag-setup-guide|AI RAG]] | 在本地知识库上进行语义检索与问答 |
 
-```mermaid
-graph TD
-    subgraph "User Skills (领域专业)"
-        PDF -->|文档处理| pdf_skill[pdf-skill]
-        PW[Playwright] -->|浏览器自动化| pw_skill[playwright-skill]
-        SS[Screenshot] -->|系统截图| ss_skill[screenshot-skill]
-        SEC[Security*] -->|安全分析| sbp[security-best-practices-skill]
-        SEC -->|安全分析| som[security-ownership-map-skill]
-        SEC -->|安全分析| stm[security-threat-model-skill]
-        Taste -->|前端设计品味| taste[taste-skill]
-        UX[UI/UX Pro Max] -->|设计智能| ux_skill[ui-ux-pro-max-skill]
-    end
-    
-    subgraph "System Skills (Codex 平台能力)"
-        IG[ImageGen] -->|图像生成| ig_skill[system-imagegen-skill]
-        OD[OpenAI Docs] -->|官方知识| od_skill[system-openai-docs-skill]
-        PC[Plugin Creator] -->|插件开发| pc_skill[system-plugin-creator-skill]
-        SC[Skill Creator] -->|Skill 开发| sc_skill[system-skill-creator-skill]
-        SI[Skill Installer] -->|Skill 安装| si_skill[system-skill-installer-skill]
-    end
-```
+AI RAG 的实现经验记录在 [[07 Lessons/rag-playground-dev-log|Playground 开发日志]]。
 
-## 交叉引用
+## 安全
 
-- [[../05 Architecture/codex-system-architecture|查看 Codex 系统架构]]
-- [[../06 Decisions/codex-config-decisions|查看配置决策记录]]
-- [[../06 Decisions/security-tools-decision-log|安全工具选择决策]]
-- [[../06 Decisions/taste-skill-design-philosophy|Taste Skill 设计理念]]
-- [[../07 Lessons/codex-lessons|使用经验与注意事项]]
-- [[../00 Inbox/codex-import-2026-07-12|导入记录]]
-- [[ai-rag-setup-guide|🧠 AI RAG 系统配置指南]]
+| Skill | 使用时机 |
+|---|---|
+| [[03 Skills/security-best-practices-skill|Security Best Practices]] | 检查支持语言的安全默认值 |
+| [[03 Skills/security-ownership-map-skill|Security Ownership Map]] | 从 Git 历史分析敏感代码所有权 |
+| [[03 Skills/security-threat-model-skill|Security Threat Model]] | 建模资产、边界和滥用路径 |
+
+三者的选择逻辑见 [[06 Decisions/security-tools-decision-log|安全工具决策]]。
+
+## 设计
+
+| Skill | 使用时机 |
+|---|---|
+| [[03 Skills/taste-skill|Taste Skill]] | 避免模板化、缺乏辨识度的前端设计 |
+| [[03 Skills/ui-ux-pro-max-skill|UI/UX Pro Max]] | 查询布局、配色、字体和体验规则 |
+| [[03 Skills/linktec-frontend-taste|LinkTech Frontend Taste]] | 将通用设计原则约束到工业门户 |
+
+设计取舍的理由见 [[06 Decisions/taste-skill-design-philosophy|Taste Skill 设计理念]]。
+
+## 项目专用
+
+[[03 Skills/linktec-skill|LinkTech Skill]] 将项目规则映射到 [[02 Projects/LinkTech-hydraulic/linktec|项目主页]]、实现架构、安全决策和排障经验。
+
+## 继续探索
+
+- [[../codex|返回 AI-Brain 总入口]]
+- [[05 Architecture/codex|按系统查看架构]]
+- [[06 Decisions/codex|按作用范围查看决策]]
+- [[07 Lessons/codex|按来源查看经验]]

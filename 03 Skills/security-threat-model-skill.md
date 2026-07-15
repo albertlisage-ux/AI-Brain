@@ -53,4 +53,4 @@
 
 ---
 
-**相关：** [[codex|← 返回 Skills 索引]] · [[security-best-practices-skill|Security Best Practices]] · [[security-ownership-map-skill|Security Ownership Map]] · [[../06 Decisions/security-tools-decision-log|安全工具决策]]
+**相关：** [[03 Skills/codex|← 返回 Skills 索引]] · [[security-best-practices-skill|Security Best Practices]] · [[security-ownership-map-skill|Security Ownership Map]] · [[../06 Decisions/security-tools-decision-log|安全工具决策]]

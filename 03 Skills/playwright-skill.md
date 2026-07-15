@@ -54,4 +54,4 @@ export PWCLI="$CODEX_HOME/skills/playwright/scripts/playwright_cli.sh"
 
 ---
 
-**相关：** [[codex|← 返回 Skills 索引]] · [[screenshot-skill|Screenshot]] · [[../05 Architecture/codex-system-architecture|系统架构]]
+**相关：** [[03 Skills/codex|← 返回 Skills 索引]] · [[screenshot-skill|Screenshot]] · [[../05 Architecture/codex-system-architecture|系统架构]]

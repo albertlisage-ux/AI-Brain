@@ -96,4 +96,4 @@ $csrf_token = generateCSRFToken();
 
 ---
 
-**相关：** [[../../02 Projects/LinkTech-hydraulic/linktec|← 项目主页]] · [[../../05 Architecture/linktech-user-system|用户系统]] · [[../../03 Skills/security-best-practices-skill|通用安全实践]]
+**相关：** [[../02 Projects/LinkTech-hydraulic/linktec|← 项目主页]] · [[../05 Architecture/linktech-user-system|用户系统]] · [[../03 Skills/security-best-practices-skill|通用安全实践]]

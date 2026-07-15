@@ -393,5 +393,5 @@ docker compose down
 - [[pdf-skill\|PDF Skill]]
 - [[../05 Architecture/codex-system-architecture\|Codex 系统架构]]
 - [[../06 Decisions/codex-config-decisions\|配置决策]]
-- [[playwright-skill\|Playwright Skill]]- [[./ai-rag-setup-guide|AI RAG 配置指南（本文）]]
+- [[playwright-skill|Playwright Skill]]
 - [[../07 Lessons/rag-playground-dev-log|Playground 开发日志]]
