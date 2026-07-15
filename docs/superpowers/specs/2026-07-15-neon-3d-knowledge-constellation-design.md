@@ -65,16 +65,18 @@ aliases: [霓虹 3D 核心知识星群设计, Neon 3D Core Knowledge Constellati
 - 不覆盖 WebGL 节点颜色，不使用高频动画，不接收图谱画布事件。
 - 保留 `prefers-reduced-motion` 兼容性。
 
-### 2026 视觉格式
+### 3D 银河图谱格式
 
-采用 Cinematic Aurora Glass，而不是高噪声 Cyberpunk：
+采用 3D Galaxy Map，以深空、恒星和星座作为视觉语义：
 
-- 使用深海军蓝、低饱和极光色、半透明深色玻璃面板和 `16px` 圆角。
-- 边框使用细白色或青色透明线，辉光只用于 Hover、Focus 和主要控制按钮。
+- 使用深海军蓝 `#050816` 作为太空背景，六个主题色球形节点作为不同星系，金色 MOC 节点作为核心恒星。
+- 使用低亮度蓝色连线表达星座路径；辉光只用于恒星节点、Hover、Focus 和主要控制按钮，避免整屏发光。
+- Hover 高亮当前恒星及直接星路，Click 拉近并聚焦，Reset 重新加热力布局；布局稳定后不永久漂移或自动旋转。
+- Observatory 玻璃效果只用于控制按钮、设置面板和计数器，采用 `16px` 圆角，不覆盖 WebGL 主画布。
 - HUD 交互使用 `160–240ms` 的 `opacity`、`border-color` 和 `box-shadow` 过渡，不动画宽高或位置。
-- 使用系统等宽字体，不加载网络字体；控制面板文字保持高对比度。
-- 画布使用 `grab` / `grabbing` 光标提示旋转交互，并保留点击聚焦作为非 Hover 操作。
+- 使用系统等宽字体，不加载网络字体；画布使用 `grab` / `grabbing` 光标提示旋转交互。
 - 遵守 `prefers-reduced-motion`，关闭非必要过渡；不使用 Glitch、CRT 闪烁或永久自动旋转。
+- 当前版本不修改插件源码，因此不增加真正的粒子星空；用节点、连线、空间层次和动态聚焦建立银河感。
 
 ### 实现位置
 
@@ -95,7 +97,7 @@ aliases: [霓虹 3D 核心知识星群设计, Neon 3D Core Knowledge Constellati
 - `data.json` 包含六个语义主题、六个核心路径过滤器，以及 `0.05 / 14 / 0.012` 精确物理参数。
 - 节点、标签和连线分别使用 `2.8`、`420 / 0.75 / 4.0` 和 `0.45`，标签背景透明度为 `0.72`。
 - Daily、Templates、Archive、附件、标签节点和孤立节点不进入 3D 图谱。
-- HUD snippet 已启用，选择器只作用于 `.graph-3d-*`，并呈现 Cinematic Aurora Glass。
+- HUD snippet 已启用，选择器只作用于 `.graph-3d-*`，并呈现 3D 银河图谱控制层。
 - 所有 JSON 可解析，CSS 括号配对，无外部资源，`git diff --check` 通过。
 - 二维 Neon Observatory 配置保持可用。
 
@@ -159,16 +161,18 @@ Add a separate CSS snippet named `ai-brain-neon-3d-graph.css`, scoped only to `.
 - Do not override WebGL node colors, add high-frequency animation, or intercept graph-canvas events.
 - Preserve `prefers-reduced-motion` compatibility.
 
-### 2026 Visual Format
+### 3D Galaxy Map Format
 
-Use Cinematic Aurora Glass instead of high-noise Cyberpunk:
+Use a 3D Galaxy Map with deep space, stars, and constellations as the visual semantics:
 
-- Use deep navy, low-saturation aurora accents, translucent dark-glass panels, and `16px` radii.
-- Use thin translucent white or cyan borders. Reserve glow for Hover, Focus, and primary controls.
+- Use deep navy `#050816` as the space background, spherical nodes in six theme colors as separate galaxies, and gold MOC nodes as core stars.
+- Use low-luminance blue links as constellation routes. Reserve glow for stars, Hover, Focus, and primary controls instead of illuminating the entire view.
+- Use Hover to highlight the current star and its direct routes, Click to zoom and focus, and Reset to reheat the force layout. Do not keep the settled graph drifting or rotating permanently.
+- Keep the Observatory glass treatment on control buttons, the settings panel, and the counter only, with `16px` radii; do not cover the WebGL canvas.
 - Use `160–240ms` transitions for `opacity`, `border-color`, and `box-shadow`; do not animate width, height, or position.
-- Use system monospaced fonts without network font loading, and keep control-panel text at high contrast.
-- Use `grab` / `grabbing` cursors on the canvas to signal rotation and retain click-to-focus as a non-Hover interaction.
+- Use system monospaced fonts without network loading, and use `grab` / `grabbing` cursors on the canvas to signal rotation.
 - Respect `prefers-reduced-motion` by disabling nonessential transitions. Do not use Glitch effects, CRT flicker, or permanent automatic rotation.
+- Do not modify plugin source in this version, so do not add a true particle starfield. Build the galaxy character through nodes, links, spatial depth, and dynamic focus.
 
 ### Implementation Locations
 
@@ -189,6 +193,6 @@ Use the network icon in the left ribbon or run `New 3D Graph: Open 3d graph` fro
 - `data.json` contains six semantic themes, six core path filters, and exact physics values `0.05 / 14 / 0.012`.
 - Nodes, labels, and links use `2.8`, `420 / 0.75 / 4.0`, and `0.45` respectively, with label-background opacity `0.72`.
 - Daily, Templates, Archive, attachments, tag nodes, and orphan nodes do not enter the 3D graph.
-- The HUD snippet is enabled, selectors are scoped only to `.graph-3d-*`, and the result follows Cinematic Aurora Glass.
+- The HUD snippet is enabled, selectors are scoped only to `.graph-3d-*`, and the result presents a 3D Galaxy Map control layer.
 - All JSON parses, CSS braces are balanced, no external resources are used, and `git diff --check` passes.
 - The two-dimensional Neon Observatory configuration remains available.
