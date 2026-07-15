@@ -39,8 +39,8 @@ aliases: [霓虹力导向星图设计, Neon Force-Directed Star Map Design]
 
 - 仅修改全局图谱和局部图谱，不影响编辑器、Canvas 或其他面板。
 - 星点保持静态，动态只使用已有低频动画，避免额外持续重绘。
-- 在 `prefers-reduced-motion: reduce` 下关闭星云、扫描线和呼吸光动画；静态星点与语义颜色保留。
-- 不安装 3D Graph、Juggl 或其他社区插件。
+- 在 `prefers-reduced-motion: reduce` 下关闭ç；静态星点与语义颜色保留。
+- 不安装 ç。
 
 ### 实现位置
 
