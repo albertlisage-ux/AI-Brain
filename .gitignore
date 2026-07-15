@@ -10,6 +10,7 @@ Thumbs.db
 # Temp
 tmp/
 temp/
+.worktrees/
 
 # RAG data (large files, not committed)
 ai-brain-rag/data/qdrant/
