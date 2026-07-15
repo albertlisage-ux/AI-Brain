@@ -1,0 +1,16 @@
+{
+  "alwaysUpdateLinks": true,
+  "useMarkdownLinks": false,
+  "newLinkFormat": "absolute",
+  "attachmentFolderPath": "Attachments",
+  "userIgnoreFilters": [
+    "02 Projects/LinkTech-hydraulic/code/",
+    "ai-brain-rag/.venv/",
+    "ai-brain-rag/data/model-cache/",
+    "ai-brain-rag/data/qdrant/",
+    "ai-brain-rag/indexer/__pycache__/",
+    "docs/superpowers/",
+    "README.md",
+    "AGENTS.md"
+  ]
+}

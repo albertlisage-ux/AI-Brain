@@ -1,0 +1,65 @@
+{
+  "collapse-filter": false,
+  "search": "-path:\"02 Projects/LinkTech-hydraulic/code\" -path:\"ai-brain-rag/.venv\" -path:\"ai-brain-rag/data/model-cache\" -path:\"ai-brain-rag/data/qdrant\" -path:\"ai-brain-rag/indexer/__pycache__\" -path:\"docs/superpowers\" -file:README -file:AGENTS",
+  "showTags": false,
+  "showAttachments": false,
+  "hideUnresolved": true,
+  "showOrphans": false,
+  "collapse-color-groups": false,
+  "colorGroups": [
+    {
+      "query": "[type:moc]",
+      "color": {
+        "a": 1,
+        "rgb": 16753920
+      }
+    },
+    {
+      "query": "[type:project]",
+      "color": {
+        "a": 1,
+        "rgb": 14701138
+      }
+    },
+    {
+      "query": "[type:skill]",
+      "color": {
+        "a": 1,
+        "rgb": 3469027
+      }
+    },
+    {
+      "query": "[type:architecture]",
+      "color": {
+        "a": 1,
+        "rgb": 3447003
+      }
+    },
+    {
+      "query": "[type:decision]",
+      "color": {
+        "a": 1,
+        "rgb": 10181046
+      }
+    },
+    {
+      "query": "[type:lesson]",
+      "color": {
+        "a": 1,
+        "rgb": 16098851
+      }
+    }
+  ],
+  "collapse-display": false,
+  "showArrow": true,
+  "textFadeMultiplier": 0,
+  "nodeSizeMultiplier": 1,
+  "lineSizeMultiplier": 1,
+  "collapse-forces": true,
+  "centerStrength": 0.518713248970312,
+  "repelStrength": 10,
+  "linkStrength": 1,
+  "linkDistance": 250,
+  "scale": 1,
+  "close": false
+}
