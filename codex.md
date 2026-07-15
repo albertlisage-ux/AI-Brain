@@ -1,3 +1,9 @@
+---
+type: moc
+topics: [ai-brain, codex, linktech, ai-rag]
+status: active
+---
+
 # AI-Brain 🧠
 
 > 个人 AI、工程实践与项目经验的知识入口。

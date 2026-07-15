@@ -1,0 +1,22 @@
+filters:
+  and:
+    - 'type == "skill"'
+properties:
+  file.name:
+    displayName: Skill
+  topics:
+    displayName: Topics
+  status:
+    displayName: Status
+  project:
+    displayName: Project
+views:
+  - type: table
+    name: Skills
+    order: [file.name, topics, status, project]
+  - type: list
+    name: Active Skills
+    filters:
+      and:
+        - 'status == "active"'
+    order: [file.name, topics]

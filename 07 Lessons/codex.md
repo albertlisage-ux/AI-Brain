@@ -1,3 +1,9 @@
+---
+type: moc
+topics: [lessons]
+status: active
+---
+
 # Lessons MOC
 
 > 经验、故障模式和变更历史入口。每条经验应能追溯到项目、架构或决策。

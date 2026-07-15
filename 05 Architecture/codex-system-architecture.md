@@ -1,3 +1,9 @@
+---
+type: architecture
+topics: [codex]
+status: reference
+---
+
 # Codex 系统架构概览
 
 > 源自 `~/.codex/` 配置分析，2026-07-12

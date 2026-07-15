@@ -1,3 +1,9 @@
+---
+type: decision
+topics: [codex, configuration]
+status: reference
+---
+
 # Codex 配置决策记录
 
 > 2026-07-12 从 `~/.codex/config.toml` 分析

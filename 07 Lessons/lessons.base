@@ -1,0 +1,22 @@
+filters:
+  and:
+    - 'type == "lesson"'
+properties:
+  file.name:
+    displayName: Lesson
+  topics:
+    displayName: Topics
+  status:
+    displayName: Status
+  project:
+    displayName: Project
+views:
+  - type: table
+    name: Lessons
+    order: [file.name, topics, status, project]
+  - type: list
+    name: Active Lessons
+    filters:
+      and:
+        - 'status == "active"'
+    order: [file.name, topics]

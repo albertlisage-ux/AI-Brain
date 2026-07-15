@@ -1,3 +1,11 @@
+---
+type: architecture
+topics: [linktech, security]
+status: active
+project:
+  - "[[02 Projects/LinkTech-hydraulic/linktec|LinkTech]]"
+---
+
 # LinkTec 用户系统与管理员 — 技术文档
 
 **来源**: `~/.codex/worktrees/102d/LinkTech-hydraulic/.roo/skills/linktec/SKILLUSER.md`  

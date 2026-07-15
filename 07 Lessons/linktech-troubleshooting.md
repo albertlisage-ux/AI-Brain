@@ -1,3 +1,11 @@
+---
+type: lesson
+topics: [linktech, troubleshooting]
+status: active
+project:
+  - "[[02 Projects/LinkTech-hydraulic/linktec|LinkTech]]"
+---
+
 # LinkTec 故障排查手册
 
 **来源**: `~/.codex/worktrees/102d/LinkTech-hydraulic/.roo/skills/linktec/TROUBLESHOOTING.md`  

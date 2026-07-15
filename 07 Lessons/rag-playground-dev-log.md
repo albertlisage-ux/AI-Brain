@@ -1,3 +1,11 @@
+---
+type: lesson
+topics: [ai-rag]
+status: active
+project:
+  - "[[../codex|AI-Brain]]"
+---
+
 # RAG Playground 开发日志
 
 > 记录 AI-Brain RAG 系统 Playground 前端的开发与迭代

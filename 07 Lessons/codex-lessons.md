@@ -1,3 +1,9 @@
+---
+type: lesson
+topics: [codex]
+status: reference
+---
+
 # Codex 使用经验记录
 
 > 2026-07-12 初始导入

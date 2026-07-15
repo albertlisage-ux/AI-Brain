@@ -1,3 +1,9 @@
+---
+type: project
+topics: [linktech, hydraulic]
+status: active
+---
+
 # LinkTech-hydraulic 项目
 
 > 源自 `~/.codex/worktrees/102d/LinkTech-hydraulic/.roo/skills/linktec/`

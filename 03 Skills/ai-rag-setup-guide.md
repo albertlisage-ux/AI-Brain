@@ -1,3 +1,11 @@
+---
+type: skill
+topics: [ai-rag, codex]
+status: active
+project:
+  - "[[../codex|AI-Brain]]"
+---
+
 # AI RAG 系统配置指南
 
 > 基于 Obsidian Vault + Qdrant + DeepSeek 的本地 RAG 方案

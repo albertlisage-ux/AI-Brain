@@ -1,3 +1,9 @@
+---
+type: moc
+topics: [architecture]
+status: active
+---
+
 # Architecture MOC
 
 > 系统组成、边界、数据流和运行方式的入口。

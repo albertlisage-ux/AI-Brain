@@ -1,3 +1,9 @@
+---
+type: moc
+topics: [decisions]
+status: active
+---
+
 # Decisions MOC
 
 > 记录选择、约束和取舍，帮助未来判断某项做法是否仍然适用。

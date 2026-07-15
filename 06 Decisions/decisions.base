@@ -1,0 +1,22 @@
+filters:
+  and:
+    - 'type == "decision"'
+properties:
+  file.name:
+    displayName: Decision
+  topics:
+    displayName: Topics
+  status:
+    displayName: Status
+  project:
+    displayName: Project
+views:
+  - type: table
+    name: Decisions
+    order: [file.name, topics, status, project]
+  - type: list
+    name: Active Decisions
+    filters:
+      and:
+        - 'status == "active"'
+    order: [file.name, topics]

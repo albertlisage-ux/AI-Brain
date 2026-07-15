@@ -1,3 +1,9 @@
+---
+type: skill
+topics: []
+status: reference
+---
+
 # Skill 分析模板
 
 > 用于将新的 Codex Skill 导入 AI-Brain

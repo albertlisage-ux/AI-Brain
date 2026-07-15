@@ -1,3 +1,9 @@
+---
+type: moc
+topics: [skills]
+status: active
+---
+
 # Skills MOC
 
 > 可复用能力与工作流入口。按任务选择 Skill，再沿链接进入其架构、决策或使用经验。
