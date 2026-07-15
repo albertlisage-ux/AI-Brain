@@ -9,7 +9,7 @@ project:
 
 # LinkTech 工作流
 
-**来源**: `~/.codex/worktrees/102d/LinkTech-hydraulic/.roo/skills/linktec/SKILL.md`  
+**来源**: `~/.codex/worktrees/102d/LinkTech-hydraulic/.roo/skills/linktec/SKILL.md`
 **用途**: 开始 LinkTech 开发任务前的操作规则、命令与文档路由。项目身份和仓库结构以 [[02 Projects/LinkTech-hydraulic/linktech-project|项目主页]] 为准。
 
 ## 当前规则
