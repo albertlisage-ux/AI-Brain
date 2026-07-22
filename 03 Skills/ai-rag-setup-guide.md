@@ -16,11 +16,13 @@ project:
 graph TB
     subgraph "数据源"
         OV[Obsidian Vault<br/>.md 文件]
+        CS[Codex sessions<br/>只读 JSONL]
     end
 
     subgraph "宿主机 (macOS)"
         IDX[Indexer<br/>pip install qdrant-client]
         OLLAMA[Ollama<br/>nomic-embed-text<br/>Metal GPU]
+        CA[Conversation Archive<br/>SQLite + DeepSeek 摘要]
     end
 
     subgraph "Docker 服务"
@@ -39,6 +41,8 @@ graph TB
     end
 
     OV -->|扫描 .md| IDX
+    CS -->|静默后读取新增内容| CA
+    CA -->|结构化 Markdown| OV
     IDX -->|HTTP API| OLLAMA
     OLLAMA -->|768d 向量| IDX
     IDX -->|Upsert| QD
@@ -57,6 +61,36 @@ graph TB
 | DeepSeek API Key | - | LLM 问答 |
 | Ollama | ≥ 0.31 | 本地嵌入模型（Metal GPU 加速） |
 | Obsidian Vault | - | 知识库源 |
+
+## Codex 会话自动归档
+
+Stop hook 不调用模型，也不等待摘要，只登记会话 ID 与原始路径。后台 worker 在
+默认 5 分钟静默期后解析可见的 user/assistant 文本，过滤 system、reasoning 和
+tool output，再使用 `.env.local` 中现有的 DeepSeek 配置生成摘要。笔记只包含摘要、
+决策、完成工作、行动项、未完成问题、解决方案、项目文件以及原始路径。
+
+安装与维护：
+
+```bash
+cd ai-brain-rag
+bash scripts/install-automation.sh
+launchctl print gui/$(id -u)/com.yuanzhe.ai-brain-conversation-archive
+launchctl print gui/$(id -u)/com.yuanzhe.ai-brain-indexer
+
+# 配置或服务修复后重启
+launchctl kickstart -k gui/$(id -u)/com.yuanzhe.ai-brain-conversation-archive
+launchctl kickstart -k gui/$(id -u)/com.yuanzhe.ai-brain-indexer
+
+# 卸载自动启动（不删除任何数据）
+bash scripts/uninstall-automation.sh
+```
+
+日志位于 `ai-brain-rag/data/logs/`，SQLite 位于
+`ai-brain-rag/data/conversation-archive/`，索引状态位于
+`ai-brain-rag/data/indexer/state.json`；这些运行时文件均被 Git 忽略。月度容量报告
+位于 `02 Projects/Codex Conversations/Reports/`，只预警，绝不压缩、移动或删除
+`~/.codex/sessions`。若 Codex transcript 格式变化，仅调整并测试
+`conversation_archive/transcript.py`，不要在 worker 或摘要器中解析原始 JSONL。
 
 ## 目录结构
 
