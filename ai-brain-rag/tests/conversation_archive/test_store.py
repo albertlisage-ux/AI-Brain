@@ -2,9 +2,16 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from conversation_archive.store import ArchiveStore, HookEvent
+from conversation_archive.config import ArchiveConfig
 
 
 UTC = timezone.utc
+
+
+def test_config_accepts_existing_obsidian_vault_path_name(tmp_path: Path) -> None:
+    configured = tmp_path / "existing-vault"
+    config = ArchiveConfig.from_env({"OBSIDIAN_VAULT_PATH": str(configured)})
+    assert config.vault_path == configured.resolve()
 
 
 def event(session_id: str, path: Path, at: datetime, turn_id: str) -> HookEvent:

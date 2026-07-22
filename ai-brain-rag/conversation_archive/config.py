@@ -39,7 +39,12 @@ class ArchiveConfig:
     def from_env(cls, environ: Mapping[str, str] | None = None) -> "ArchiveConfig":
         source = os.environ if environ is None else environ
         project_root = Path(__file__).resolve().parent.parent
-        vault = _path(source.get("OBSIDIAN_VAULT", str(project_root.parent)))
+        vault = _path(
+            source.get(
+                "OBSIDIAN_VAULT",
+                source.get("OBSIDIAN_VAULT_PATH", str(project_root.parent)),
+            )
+        )
         return cls(
             vault_path=vault,
             sessions_root=_path(
