@@ -20,6 +20,7 @@ class NormalizedTranscript:
     created_at: datetime
     messages: tuple[NormalizedMessage, ...]
     content_hash: str
+    source_path: Path | None = None
 
 
 def _parse_time(value: object) -> datetime | None:
@@ -122,4 +123,5 @@ def parse_transcript(path: Path, sessions_root: Path) -> NormalizedTranscript:
         created_at=created_at,
         messages=tuple(messages),
         content_hash=content_hash,
+        source_path=resolved_path,
     )
