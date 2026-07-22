@@ -148,6 +148,12 @@ class ArchiveStore:
         row = self._connection.execute("SELECT COUNT(*) AS count FROM sessions").fetchone()
         return int(row["count"])
 
+    def successful_session_ids(self) -> set[str]:
+        rows = self._connection.execute(
+            "SELECT session_id FROM sessions WHERE status = 'succeeded'"
+        ).fetchall()
+        return {str(row["session_id"]) for row in rows}
+
     def close(self) -> None:
         self._connection.close()
 
