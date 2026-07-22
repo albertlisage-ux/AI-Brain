@@ -12,6 +12,9 @@ build/
 # Data (persistent volumes)
 data/qdrant/
 data/model-cache/
+data/conversation-archive/
+data/indexer/
+data/logs/
 
 # OS
 .DS_Store
