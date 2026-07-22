@@ -5,6 +5,7 @@ QDRANT_PORT = int(os.getenv("QDRANT_PORT", "6333"))
 QDRANT_COLLECTION = os.getenv("QDRANT_COLLECTION", "ai-brain")
 OBSIDIAN_VAULT = os.getenv("OBSIDIAN_VAULT", "/vault")
 SCAN_INTERVAL = int(os.getenv("SCAN_INTERVAL", "30"))
+INDEXER_STATE_FILE = os.getenv("INDEXER_STATE_FILE", "data/indexer/state.json")
 CHUNK_SIZE = int(os.getenv("CHUNK_SIZE", "500"))
 CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP", "50"))
 

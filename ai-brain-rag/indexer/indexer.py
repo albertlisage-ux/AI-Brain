@@ -13,6 +13,7 @@ import sys
 import time
 import traceback
 import uuid
+import tempfile
 from pathlib import Path
 
 from qdrant_client import QdrantClient
@@ -23,7 +24,7 @@ from qdrant_client.models import (
     Filter,
     FieldCondition,
     MatchValue,
-    HasIdCondition,
+    FilterSelector,
 )
 
 from chunker import chunk_markdown
@@ -35,6 +36,7 @@ from config import (
     OBSIDIAN_VAULT,
     SCAN_INTERVAL,
     EXCLUDE_DIRS,
+    INDEXER_STATE_FILE,
 )
 from embedder import embed_texts
 from scanner import scan_vault
@@ -47,13 +49,13 @@ logging.basicConfig(
 logger = logging.getLogger("indexer")
 
 # State file to track file hashes across restarts
-STATE_FILE = "/tmp/indexer_state.json"
+STATE_FILE = INDEXER_STATE_FILE
+POINT_NAMESPACE = uuid.UUID("ed6d7bea-1a17-56b7-b2a4-e180d93fdbfa")
 
 
-def _get_file_id(filepath: str, chunk_index: int) -> str:
-    """Generate a unique ID for a chunk."""
-    rel = filepath.replace(str(OBSIDIAN_VAULT), "").lstrip("/")
-    return f"{rel}::chunk_{chunk_index}"
+def _point_id(rel_path: str, chunk_index: int) -> str:
+    """Generate the stable Qdrant UUID for one relative-path chunk."""
+    return str(uuid.uuid5(POINT_NAMESPACE, f"{rel_path}::chunk_{chunk_index}"))
 
 
 def _get_point(file_id: str, vector: list[float], payload: dict) -> PointStruct:
@@ -80,8 +82,33 @@ def load_state() -> dict:
 
 
 def save_state(state: dict):
-    with open(STATE_FILE, "w") as f:
-        json.dump(state, f)
+    destination = Path(STATE_FILE)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    temporary = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            "w", encoding="utf-8", dir=destination.parent, delete=False
+        ) as handle:
+            json.dump(state, handle, sort_keys=True)
+            handle.write("\n")
+            temporary = Path(handle.name)
+        temporary.replace(destination)
+    finally:
+        if temporary is not None and temporary.exists():
+            temporary.unlink()
+
+
+def _delete_file_points(client: QdrantClient, rel_path: str) -> None:
+    """Delete every prior vector for a relative Vault path."""
+    client.delete(
+        collection_name=QDRANT_COLLECTION,
+        points_selector=FilterSelector(
+            filter=Filter(
+                must=[FieldCondition(key="filepath", match=MatchValue(value=rel_path))]
+            )
+        ),
+        wait=True,
+    )
 
 
 def index_vault(client: QdrantClient):
@@ -92,9 +119,12 @@ def index_vault(client: QdrantClient):
     current_files = scan_vault()
     prev_state = load_state()
 
-    changed = [rel for rel, info in current_files.items()
-               if rel not in prev_state or prev_state[rel]["hash"] != info["hash"]]
-    deleted = [rel for rel in prev_state if rel not in current_files]
+    changed = sorted(
+        rel
+        for rel, info in current_files.items()
+        if rel not in prev_state or prev_state[rel]["hash"] != info["hash"]
+    )
+    deleted = sorted(rel for rel in prev_state if rel not in current_files)
 
     if not changed and not deleted:
         logger.info("No changes. Next scan in %ds.", SCAN_INTERVAL)
@@ -102,20 +132,14 @@ def index_vault(client: QdrantClient):
 
     logger.info("Changed: %d  Deleted: %d", len(changed), len(deleted))
 
+    next_state = dict(prev_state)
+
     # --- Delete removed files ---
     for rel in deleted:
         try:
-            points, _ = client.scroll(
-                collection_name=QDRANT_COLLECTION,
-                scroll_filter=Filter(must=[
-                    FieldCondition(key="_filepath", match=MatchValue(value=rel))
-                ]),
-                limit=1000,
-            )
-            ids = [p.id for p in points]
-            if ids:
-                client.delete(collection_name=QDRANT_COLLECTION, points_selector=ids)
-                logger.info("  🗑 Deleted %d points for '%s'", len(ids), rel)
+            _delete_file_points(client, rel)
+            next_state.pop(rel, None)
+            logger.info("  Deleted prior points for '%s'", rel)
         except Exception:
             logger.warning("  Failed to delete '%s': %s", rel, traceback.format_exc())
 
@@ -136,7 +160,13 @@ def index_vault(client: QdrantClient):
             continue
 
         if not chunks:
-            logger.info("    → 0 chunks, skipped")
+            try:
+                _delete_file_points(client, rel)
+            except Exception as e:
+                logger.warning("  SKIP (delete empty): %s", e)
+                continue
+            next_state[rel] = current_files[rel]
+            logger.info("    → 0 chunks, prior points removed")
             continue
 
         # 2. Embed
@@ -154,7 +184,7 @@ def index_vault(client: QdrantClient):
         # 3. Upsert
         points = []
         for ci, (chunk, vec) in enumerate(zip(chunks, vectors)):
-            fid = str(uuid.uuid4())
+            fid = _point_id(rel, ci)
             folder = str(Path(rel).parent)
             title = Path(rel).stem
             points.append(_get_point(fid, vec, {
@@ -163,9 +193,20 @@ def index_vault(client: QdrantClient):
                 "chunk_index": ci,
             }))
 
-        BATCH = 100
-        for i in range(0, len(points), BATCH):
-            client.upsert(collection_name=QDRANT_COLLECTION, points=points[i:i+BATCH])
+        try:
+            _delete_file_points(client, rel)
+            BATCH = 100
+            for i in range(0, len(points), BATCH):
+                client.upsert(
+                    collection_name=QDRANT_COLLECTION,
+                    points=points[i:i+BATCH],
+                    wait=True,
+                )
+        except Exception as e:
+            logger.warning("  SKIP (Qdrant replace): %s", e)
+            continue
+
+        next_state[rel] = current_files[rel]
 
         total_chunks += len(chunks)
         avg = elapsed / len(chunks) * 1000
@@ -176,7 +217,7 @@ def index_vault(client: QdrantClient):
         logger.info("─" * 40)
         logger.info("Done: %d files, %d chunks, %.1fs total", total_files, total_chunks, total_time)
 
-    save_state(current_files)
+    save_state(next_state)
     # Explicit flush so logs appear immediately
     for h in logger.handlers:
         h.flush()
