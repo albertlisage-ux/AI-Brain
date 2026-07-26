@@ -30,7 +30,7 @@ def config(tmp_path: Path) -> ArchiveConfig:
             "OBSIDIAN_VAULT": str(tmp_path),
             "CODEX_SESSIONS_ROOT": str(tmp_path / "sessions"),
             "CONVERSATION_ARCHIVE_DB": str(tmp_path / "state.sqlite3"),
-            "CONVERSATION_QUIET_SECONDS": "300",
+            "CONVERSATION_QUIET_SECONDS": "60",
             "DEEPSEEK_API_KEY": "test-only-key",
         }
     )

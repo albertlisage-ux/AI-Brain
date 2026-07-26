@@ -19,7 +19,11 @@ def test_merge_preserves_existing_hook_entries() -> None:
     assert existing == original
     assert merged["hooks"]["Start"] == original["hooks"]["Start"]
     assert merged["unrelated"] == original["unrelated"]
-    assert {entry["command"] for entry in merged["hooks"]["Stop"]} == {
+    assert {
+        handler["command"]
+        for group in merged["hooks"]["Stop"]
+        for handler in group["hooks"]
+    } == {
         "/existing/hook",
         "/absolute/archive-hook",
     }
@@ -40,3 +44,15 @@ def test_merge_requires_absolute_command() -> None:
         assert "absolute" in str(exc)
     else:
         raise AssertionError("relative command was accepted")
+
+
+def test_merge_writes_codex_matcher_group_schema() -> None:
+    merged = merge_stop_hook({}, "/absolute/archive-hook")
+
+    assert merged["hooks"]["Stop"] == [
+        {
+            "hooks": [
+                {"type": "command", "command": "/absolute/archive-hook"}
+            ]
+        }
+    ]

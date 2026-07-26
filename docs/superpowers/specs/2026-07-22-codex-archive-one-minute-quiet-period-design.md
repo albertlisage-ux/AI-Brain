@@ -2,11 +2,11 @@
 
 ## Goal
 
-Change the Codex conversation archive quiet period from five minutes to one minute so completed turns are summarized sooner.
+Use a 60-second Codex conversation archive quiet period so completed turns are summarized promptly.
 
 ## Design
 
-- Change the `ArchiveConfig.from_env()` default for `CONVERSATION_QUIET_SECONDS` from `300` to `60`.
+- Set the `ArchiveConfig.from_env()` default for `CONVERSATION_QUIET_SECONDS` to `60`.
 - Set `CONVERSATION_QUIET_SECONDS=60` in the existing ignored `.env.local` without reading, printing, or changing any secret value.
 - Preserve the current SQLite eligibility, coalescing, retry, transcript parsing, summarization, note writing, and indexing behavior.
 - Update user-facing documentation to describe a one-minute quiet period.

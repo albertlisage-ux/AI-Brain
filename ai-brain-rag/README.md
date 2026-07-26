@@ -35,7 +35,7 @@ curl http://localhost:8000/health
 ## Codex 会话归档
 
 会话归档由快速 Stop hook 与后台 worker 组成。hook 只把 `session_id` 和
-`transcript_path` 合并写入 SQLite；静默 5 分钟后，worker 使用现有 DeepSeek
+`transcript_path` 合并写入 SQLite；静默 1 分钟后，worker 使用现有 DeepSeek
 配置生成结构化笔记，并写入 `02 Projects/Codex Conversations/YYYY/MM/`。
 原始 transcript 不会复制到 Vault 或 Qdrant。
 

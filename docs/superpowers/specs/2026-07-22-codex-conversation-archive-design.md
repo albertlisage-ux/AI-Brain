@@ -51,7 +51,7 @@ Existing user-level hook configuration must be merged rather than overwritten. T
 
 Use SQLite inside `ai-brain-rag/data/conversation-archive/state.sqlite3`. The database records pending sessions, the latest observed turn, last transcript modification time, processing status, retry count, last successful content hash, note path, and error information.
 
-Repeated hook events for the same session are coalesced. A session becomes eligible for processing after a configurable quiet period, initially five minutes. This prevents a long conversation from producing a new summary after every turn.
+Repeated hook events for the same session are coalesced. A session becomes eligible for processing after a configurable quiet period, initially 60 seconds. This prevents a long conversation from producing a new summary after every turn.
 
 Failed jobs use bounded exponential retry and remain visible in logs and state. A failed summary never replaces a previously valid note.
 
@@ -138,7 +138,7 @@ Installer and uninstaller scripts manage only the launch-agent files created by 
 
 1. Codex finishes a turn and runs the `Stop` hook.
 2. The hook coalesces the session into SQLite and returns.
-3. The worker waits until the session has been quiet for five minutes.
+3. The worker waits until the session has been quiet for 60 seconds.
 4. The transcript adapter normalizes permitted conversational content.
 5. If the normalized hash is unchanged, processing stops.
 6. DeepSeek produces a validated structured summary.

@@ -63,11 +63,27 @@ def merge_stop_hook(existing: dict[str, Any], command: str) -> dict[str, Any]:
     stop_hooks = hooks.setdefault("Stop", [])
     if not isinstance(stop_hooks, list):
         raise ValueError("hooks.Stop must be a list")
+
+    normalized_stop_hooks: list[dict[str, Any]] = []
+    for entry in stop_hooks:
+        if isinstance(entry, dict) and entry.get("type") == "command":
+            normalized_stop_hooks.append({"hooks": [entry]})
+        else:
+            normalized_stop_hooks.append(entry)
+    hooks["Stop"] = normalized_stop_hooks
+
     if not any(
-        isinstance(entry, dict) and entry.get("command") == command
-        for entry in stop_hooks
+        isinstance(group, dict)
+        and isinstance(group.get("hooks"), list)
+        and any(
+            isinstance(handler, dict) and handler.get("command") == command
+            for handler in group["hooks"]
+        )
+        for group in normalized_stop_hooks
     ):
-        stop_hooks.append({"type": "command", "command": command})
+        normalized_stop_hooks.append(
+            {"hooks": [{"type": "command", "command": command}]}
+        )
     return merged
 
 

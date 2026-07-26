@@ -31,7 +31,7 @@
 - Produces: `ArchiveConfig.from_env() -> ArchiveConfig`
 - Produces: `ArchiveStore.enqueue(event: HookEvent)`, `eligible(now)`, `mark_success(...)`, and `mark_failure(...)`.
 
-- [ ] Write failing pytest cases proving repeated session events coalesce, the newest turn wins, five-minute quiet-period eligibility works, and retry state survives reopening SQLite.
+- [ ] Write failing pytest cases proving repeated session events coalesce, the newest turn wins, 60-second quiet-period eligibility works, and retry state survives reopening SQLite.
 - [ ] Run `ai-brain-rag/.venv/bin/pytest tests/conversation_archive/test_store.py -q`; expect failures because the package does not exist.
 - [ ] Implement typed configuration with explicit Vault, session-root, SQLite, quiet-period, DeepSeek, and report-threshold settings; implement schema creation and transactional upserts in `ArchiveStore`.
 - [ ] Add `data/conversation-archive/`, `data/indexer/`, and `data/logs/` to `.gitignore` while keeping code and tests tracked.

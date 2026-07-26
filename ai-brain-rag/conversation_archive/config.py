@@ -57,7 +57,7 @@ class ArchiveConfig:
                 )
             ),
             quiet_period=timedelta(
-                seconds=_positive_int(source, "CONVERSATION_QUIET_SECONDS", 300)
+                seconds=_positive_int(source, "CONVERSATION_QUIET_SECONDS", 60)
             ),
             deepseek_api_key=source.get("DEEPSEEK_API_KEY", ""),
             deepseek_api_base=source.get(

@@ -65,7 +65,7 @@ graph TB
 ## Codex 会话自动归档
 
 Stop hook 不调用模型，也不等待摘要，只登记会话 ID 与原始路径。后台 worker 在
-默认 5 分钟静默期后解析可见的 user/assistant 文本，过滤 system、reasoning 和
+默认 60 秒静默期后解析可见的 user/assistant 文本，过滤 system、reasoning 和
 tool output，再使用 `.env.local` 中现有的 DeepSeek 配置生成摘要。笔记只包含摘要、
 决策、完成工作、行动项、未完成问题、解决方案、项目文件以及原始路径。
 

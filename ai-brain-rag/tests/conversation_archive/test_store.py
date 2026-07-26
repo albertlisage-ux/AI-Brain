@@ -25,7 +25,7 @@ def event(session_id: str, path: Path, at: datetime, turn_id: str) -> HookEvent:
 
 def test_repeated_events_coalesce_and_newest_turn_wins(tmp_path: Path) -> None:
     database = tmp_path / "archive.sqlite3"
-    store = ArchiveStore(database, quiet_period=timedelta(minutes=5))
+    store = ArchiveStore(database, quiet_period=timedelta(seconds=60))
     first = datetime(2026, 7, 22, 10, 0, tzinfo=UTC)
 
     store.enqueue(event("session-1", tmp_path / "old.jsonl", first, "turn-1"))
@@ -45,13 +45,13 @@ def test_repeated_events_coalesce_and_newest_turn_wins(tmp_path: Path) -> None:
     assert store.count() == 1
 
 
-def test_eligible_requires_five_minutes_of_quiet(tmp_path: Path) -> None:
-    store = ArchiveStore(tmp_path / "archive.sqlite3", quiet_period=timedelta(minutes=5))
+def test_eligible_requires_sixty_seconds_of_quiet(tmp_path: Path) -> None:
+    store = ArchiveStore(tmp_path / "archive.sqlite3", quiet_period=timedelta(seconds=60))
     occurred = datetime(2026, 7, 22, 10, 0, tzinfo=UTC)
     store.enqueue(event("session-1", tmp_path / "session.jsonl", occurred, "turn-1"))
 
-    assert store.eligible(occurred + timedelta(minutes=4, seconds=59)) == []
-    assert [item.session_id for item in store.eligible(occurred + timedelta(minutes=5))] == [
+    assert store.eligible(occurred + timedelta(seconds=59)) == []
+    assert [item.session_id for item in store.eligible(occurred + timedelta(seconds=60))] == [
         "session-1"
     ]
 
@@ -59,13 +59,13 @@ def test_eligible_requires_five_minutes_of_quiet(tmp_path: Path) -> None:
 def test_retry_state_survives_reopening_database(tmp_path: Path) -> None:
     database = tmp_path / "archive.sqlite3"
     occurred = datetime(2026, 7, 22, 10, 0, tzinfo=UTC)
-    store = ArchiveStore(database, quiet_period=timedelta(minutes=5))
+    store = ArchiveStore(database, quiet_period=timedelta(seconds=60))
     store.enqueue(event("session-1", tmp_path / "session.jsonl", occurred, "turn-1"))
     retry_at = occurred + timedelta(minutes=15)
     store.mark_failure("session-1", "temporary failure", retry_at=retry_at)
     store.close()
 
-    reopened = ArchiveStore(database, quiet_period=timedelta(minutes=5))
+    reopened = ArchiveStore(database, quiet_period=timedelta(seconds=60))
     queued = reopened.get("session-1")
     assert queued is not None
     assert queued.attempts == 1
@@ -78,7 +78,7 @@ def test_retry_state_survives_reopening_database(tmp_path: Path) -> None:
 def test_success_state_survives_newer_events(tmp_path: Path) -> None:
     database = tmp_path / "archive.sqlite3"
     occurred = datetime(2026, 7, 22, 10, 0, tzinfo=UTC)
-    store = ArchiveStore(database, quiet_period=timedelta(minutes=5))
+    store = ArchiveStore(database, quiet_period=timedelta(seconds=60))
     store.enqueue(event("session-1", tmp_path / "session.jsonl", occurred, "turn-1"))
     store.mark_success("session-1", content_hash="abc", note_path=tmp_path / "note.md")
 
